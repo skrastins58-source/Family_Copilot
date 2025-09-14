@@ -94,14 +94,14 @@ jobs:
                 
                 const comment = `## 🔍 Lighthouse CI Results
                 
-| Category | Score |
-|----------|-------|
-| Performance | ${scores.performance}% |
-| Accessibility | ${scores.accessibility}% |
-| Best Practices | ${scores['best-practices']}% |
-| SEO | ${scores.seo}% |
-
-View detailed reports in the artifacts.`;
+                | Category | Score |
+                |----------|-------|
+                | Performance | ${scores.performance}% |
+                | Accessibility | ${scores.accessibility}% |
+                | Best Practices | ${scores['best-practices']}% |
+                | SEO | ${scores.seo}% |
+                
+                View detailed reports in the artifacts.`;
                 
                 github.rest.issues.createComment({
                   issue_number: context.issue.number,

@@ -137,13 +137,13 @@ jobs:
             
             const comment = `## 📦 Bundle Size Analysis
             
-| Build Type | Size | Threshold | Status |
-|------------|------|-----------|---------|
-| APK | ${sizeAnalysis.apk.size_mb}MB | ${sizeAnalysis.apk.max_size_mb}MB | ${apkStatus} |
-| Web Bundle | ${sizeAnalysis.web.size_mb}MB | ${sizeAnalysis.web.max_size_mb}MB | ${webStatus} |
-
-${!sizeAnalysis.apk.within_limit ? '⚠️ **Warning**: APK size exceeds threshold\n' : ''}${!sizeAnalysis.web.within_limit ? '⚠️ **Warning**: Web bundle size exceeds threshold\n' : ''}
-Build artifacts available in workflow run.`;
+            | Build Type | Size | Threshold | Status |
+            |------------|------|-----------|---------|
+            | APK | ${sizeAnalysis.apk.size_mb}MB | ${sizeAnalysis.apk.max_size_mb}MB | ${apkStatus} |
+            | Web Bundle | ${sizeAnalysis.web.size_mb}MB | ${sizeAnalysis.web.max_size_mb}MB | ${webStatus} |
+            
+            ${!sizeAnalysis.apk.within_limit ? '⚠️ **Warning**: APK size exceeds threshold\n' : ''}${!sizeAnalysis.web.within_limit ? '⚠️ **Warning**: Web bundle size exceeds threshold\n' : ''}
+            Build artifacts available in workflow run.`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
