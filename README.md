@@ -15,6 +15,24 @@ Flutter projekts, kas demonstrē GitHub Copilot labākās prakses un uzlabo ziņ
 
 Zarojumu sliekšņa paaugstināšana uz 80% atspoguļo stabilo testu infrastruktūru, kas nodrošina augstu koda kvalitāti un mazina bugs risku production vidē.
 
+### Kvalitātes Kritēriji un Validācijas Sliekšņi
+
+| **Validācijas veids** | **Kritērijs** | **Slieksnis** | **Statuss** | **Darbība** |
+|----------------------|---------------|---------------|-------------|-------------|
+| 🏎️ **LHCI Performance** | First Contentful Paint (FCP) | ≤ 2000ms | ⚠️ Warn | Optimizēt resursu ielādi |
+| ⚡ **LHCI Interactive** | Time to Interactive (TTI) | ≤ 3000ms | ⚠️ Warn | Samazināt JavaScript izmēru |
+| ♿ **LHCI Accessibility** | Accessibility Score | ≥ 0.9 (90%) | ❌ Error | Obligāta labošana |
+| 🔍 **LHCI SEO** | SEO Score | ≥ 0.9 (90%) | ⚠️ Warn | Meta tagu optimizācija |
+| 🧪 **Golden Tests** | Visual Regression | 0 izmaiņas | ❌ Error | UI konsistences pārbaude |
+| 📦 **Bundle Size** | Build izmērs | < 5MB | ⚠️ Warn | Dependencies audits |
+| 🧹 **Code Coverage** | Zaru segums | ≥ 80% | ❌ Error | Testu paplašināšana |
+
+**Automatizētas pārbaudes PR procesos:**
+- ✅ LHCI rezultāti ar emoji statusiem un artefaktu saitēm
+- ✅ Bundle size salīdzinājums ar iepriekšējām versijām
+- ✅ Golden test diff vizualizācija
+- ✅ Coverage delta atskaites
+
 ## GitHub Copilot Labākās Prakses
 
 Šis projekts demonstrē, kā rakstīt kodu, lai GitHub Copilot sniegtu vislabākos ieteikumus:
