@@ -1,3 +1,4 @@
+
 name: CI/CD Pipeline
 
 on:
@@ -105,3 +106,121 @@ jobs:
       with:
         name: coverage-report
         path: coverage/html/
+=======
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+      - master
+      - develop
+
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  build:
+    name: Build APK & Web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+       with:
+  flutter-version: "3.25.0"
+
+
+      - name: Enable web support
+        run: flutter config --enable-web
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Android APK
+        run: flutter build apk --debug
+
+      - name: Build Web bundle
+        run: flutter build web --release
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            build/app/outputs/flutter-apk/app-debug.apk
+            build/web
+
+  test:
+    name: Run tests & coverage
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ secrets.FLUTTER_VERSION }}
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run unit & widget tests with coverage
+        run: flutter test --coverage
+
+      - name: Enforce coverage thresholds
+        run: scripts/check_coverage.sh
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
+
+      - name: Run golden tests
+        run: flutter test
+
+      - name: Upload golden artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: golden-artifacts
+          path: |
+            goldens
+            tests/diff
+
+  pr-summary:
+    name: Post PR Quality Summary
+    if: github.event_name == 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Post PR summary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: node post-pr-summary.js
+

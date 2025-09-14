@@ -3,6 +3,18 @@
 
 Flutter projekts, kas demonstrē GitHub Copilot labākās prakses un uzlabo ziņu sistēmu ar deep-link navigāciju, vizuāliem paziņojumiem, CI/CD automatizāciju un personalizētu filtrēšanu. Lietotāji saņem tikai sev aktuālas ziņas, un izstrādātāji iegūst efektīvu darba plūsmu ar Firebase Functions un GitHub Actions.
 
+## Testēšana un Code Coverage
+
+📈 **Zarojumu slieksnis atjaunots uz 80%** - pēc visaptverošas UI testu sistēmas pievienošanas `test/main_test.dart` failā, kas nodrošina:
+
+- **App inicializācijas testus** ar Provider un MaterialApp (main.dart)
+- **Iestatījumu izvēles loģiku** un UI reakcijas (settings_screen.dart) 
+- **Tumšā režīma pārbaudi** ar pilnu funkcionalitāti (settings_screen.dart)
+- **Kļūdu apstrādes piemērus** ar dialogi un validāciju (settings_screen.dart)
+- **Edge case un integrācijas testus** stāvokļa pārvaldībai
+
+Zarojumu sliekšņa paaugstināšana uz 80% atspoguļo stabilo testu infrastruktūru, kas nodrošina augstu koda kvalitāti un mazina bugs risku production vidē.
+
 ## GitHub Copilot Labākās Prakses
 
 Šis projekts demonstrē, kā rakstīt kodu, lai GitHub Copilot sniegtu vislabākos ieteikumus:
@@ -169,6 +181,8 @@ Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izs
 - **Vizuāli īpaši paziņojumi** — paziņojumi ar attēliem, ikonām un tēmas stilu.
 - **CI/CD ar Firebase Functions** — automātiska funkciju izvietošana ar GitHub Actions.
 - **Personalizēta ziņu filtrēšana** — ziņas tiek rādītas un sūtītas atbilstoši lietotāja interesēm.
+
+📌 **Zarojumu slieksnis atjaunots uz 80%** pēc visaptverošas UI testu sistēmas pievienošanas, kas nodrošina augstu koda kvalitāti un coverage metrikas.
 
 ## 🧰 Tehnoloģijas
 

@@ -95,3 +95,7 @@ google-services.json
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+# Temporary Flutter installation files
+flutter.tar.xz
+flutter/
