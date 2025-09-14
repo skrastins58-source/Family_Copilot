@@ -83,7 +83,7 @@ void main() {
       });
 
       testWidgets('Settings screen renders correctly with all sections', (WidgetTester tester) async {
-        // Test: (2) iestatījumu izvēles loģiku un UI reakciju (settings_screen.dart)
+        // Test: Settings screen renders with all main sections (settings_screen.dart)
         
         await tester.pumpWidget(
           MaterialApp(
