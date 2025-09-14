@@ -1,0 +1,18 @@
+name: Monorepo CI
+
+on:
+  push:
+    paths:
+      - 'CI-CD-Symphony/**'
+      - 'Family_Copilot/**'
+      - 'shared/**'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        project: [CI-CD-Symphony, Family_Copilot]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd ${{ matrix.project }} && npm install && npm test
