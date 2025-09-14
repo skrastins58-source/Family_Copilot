@@ -227,7 +227,7 @@ void main() {
       });
 
       testWidgets('Dark mode toggle works correctly', (WidgetTester tester) async {
-        // Test: (3) tumšā režīma pārbaudi (settings_screen.dart)
+        // Verifies that toggling the dark mode switch updates the app's theme and UI icons accordingly.
         
         await tester.pumpWidget(
           MaterialApp(
