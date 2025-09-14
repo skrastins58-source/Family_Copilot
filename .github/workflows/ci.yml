@@ -1,0 +1,138 @@
+name: CI/CD Pipeline
+
+# Trigger on push and pull_request events as requested
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  # Build job for Flutter project
+  build:
+    name: Build Flutter App
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Use standard actions/checkout@v4 as specified
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Setup Flutter environment
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      # Get dependencies
+      - name: Install dependencies
+        run: flutter pub get
+      
+      # Analyze code with flutter analyze
+      - name: Analyze code
+        run: flutter analyze
+      
+      # Build APK for Android
+      - name: Build APK
+        run: flutter build apk --release
+      
+      # Build web version
+      - name: Build Web
+        run: flutter build web --release
+      
+      # Upload build artifacts
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+      
+      - name: Upload Web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-web
+          path: build/web/
+
+  # Test job for Flutter project
+  test:
+    name: Test Flutter App
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Install dependencies
+        run: flutter pub get
+      
+      # Create basic test if test directory doesn't exist
+      - name: Ensure test directory exists
+        run: |
+          if [ ! -d "test" ]; then
+            mkdir -p test
+            cat > test/widget_test.dart << 'EOF'
+          import 'package:flutter/material.dart';
+          import 'package:flutter_test/flutter_test.dart';
+          import 'package:family_copilot/main.dart';
+
+          void main() {
+            testWidgets('App smoke test', (WidgetTester tester) async {
+              // Build our app and trigger a frame.
+              await tester.pumpWidget(const MyApp());
+
+              // Verify that the app starts without crashing
+              expect(find.byType(MaterialApp), findsOneWidget);
+            });
+          }
+          EOF
+          fi
+      
+      # Run Flutter tests
+      - name: Run tests
+        run: flutter test --coverage
+      
+      # Upload test coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: coverage/lcov.info
+          fail_ci_if_error: false
+
+  # Placeholder job for creating UI as requested
+  create-ui:
+    name: Create UI Components
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      # Placeholder job content as specified
+      - name: Building UI components
+        run: |
+          echo "Building UI..."
+          echo "This is a placeholder job for UI automation"
+          echo "Future implementations could include:"
+          echo "- Automated UI component generation"
+          echo "- Design token compilation"
+          echo "- Asset optimization"
+          echo "- UI testing automation"
+      
+      - name: UI Build Status
+        run: |
+          echo "✅ UI components build process completed"
+          echo "📱 Ready for UI automation integration"
