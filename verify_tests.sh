@@ -39,6 +39,10 @@ echo "📊 Coverage Requirements Check:"
 echo "------------------------------"
 
 # Verify coverage thresholds
+if [ ! -f "coverage-summary.json" ]; then
+    echo "❌ Coverage summary file missing: coverage-summary.json"
+    exit 1
+fi
 BRANCHES_THRESHOLD=$(grep -o '"branches": [0-9]*' coverage-summary.json | grep -o '[0-9]*')
 if [ "$BRANCHES_THRESHOLD" = "80" ]; then
     echo "✅ Branch coverage threshold: $BRANCHES_THRESHOLD% (Target: 80%)"
