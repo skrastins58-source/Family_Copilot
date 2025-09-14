@@ -1,4 +1,4 @@
-// UI tests for Family Copilot Flutter application
+// UI and unit tests for Family Copilot Flutter application
 // Comprehensive test suite covering main app initialization,
 // settings screen logic, dark mode functionality, and error handling
 
