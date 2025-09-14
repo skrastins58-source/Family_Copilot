@@ -1,0 +1,21 @@
+{
+  "name": "family-copilot-web",
+  "version": "1.0.0",
+  "description": "Family Copilot web assets and CI/CD tools",
+  "private": true,
+  "devDependencies": {
+    "@lhci/cli": "^0.13.0"
+  },
+  "scripts": {
+    "lhci": "lhci",
+    "lhci:autorun": "lhci autorun"
+  },
+  "keywords": [
+    "flutter",
+    "lighthouse",
+    "ci-cd",
+    "performance"
+  ],
+  "author": "Family Copilot Team",
+  "license": "MIT"
+}

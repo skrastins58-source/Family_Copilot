@@ -1,0 +1,137 @@
+name: Flutter Golden Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  golden-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install Flutter dependencies
+      run: flutter pub get
+      
+    - name: Install Linux dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang cmake ninja-build pkg-config libgtk-3-dev \
+          libblkid-dev liblzma-dev fonts-noto-color-emoji
+          
+    - name: Enable desktop support
+      run: flutter config --enable-linux-desktop
+      
+    - name: Run golden tests
+      run: |
+        # Run golden tests in headless mode
+        flutter test --reporter github test/widget_test.dart \
+          --dart-define=GOLDEN_TEST_MODE=true \
+          --verbose
+      env:
+        # Ensure consistent font rendering across environments
+        FLUTTER_TEST_FONT: 'Roboto'
+        
+    - name: Check for golden file updates
+      id: golden-check
+      run: |
+        # Check if any golden files were updated/created
+        if git diff --exit-code test/goldens/ 2>/dev/null; then
+          echo "golden_files_changed=false" >> $GITHUB_OUTPUT
+          echo "No golden files changed"
+        else
+          echo "golden_files_changed=true" >> $GITHUB_OUTPUT
+          echo "Golden files have been updated"
+          
+          # Show the changes
+          echo "=== Golden file changes ==="
+          git diff --name-only test/goldens/ || echo "New golden files added"
+          git status --porcelain test/goldens/ || echo "No changes in goldens directory"
+        fi
+        
+    - name: Upload golden file failures
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: golden-failures-${{ github.sha }}
+        path: |
+          test/goldens/
+          test/failures/
+        retention-days: 30
+        
+    - name: Upload updated golden files
+      if: steps.golden-check.outputs.golden_files_changed == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: updated-golden-files-${{ github.sha }}
+        path: test/goldens/
+        retention-days: 30
+        
+    - name: Comment PR with golden test results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { execSync } = require('child_process');
+          
+          try {
+            // Check if golden tests passed
+            const goldenFilesChanged = '${{ steps.golden-check.outputs.golden_files_changed }}' === 'true';
+            
+            let comment = '## 🎨 Golden Test Results\n\n';
+            
+            if (goldenFilesChanged) {
+              comment += '⚠️ **Golden files have been updated**\n\n';
+              comment += 'New baseline images have been generated. Please review the changes:\n';
+              comment += '1. Download the `updated-golden-files` artifact\n';
+              comment += '2. Review the visual changes\n';
+              comment += '3. If the changes are expected, commit the updated golden files\n\n';
+            } else {
+              comment += '✅ **All golden tests passed**\n\n';
+              comment += 'No visual regressions detected. UI components match their baseline images.\n\n';
+            }
+            
+            comment += '📋 **What are golden tests?**\n';
+            comment += 'Golden tests capture widget screenshots and compare them against baseline images to detect UI regressions.\n';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          } catch (error) {
+            console.log('Could not post golden test results comment:', error);
+          }
+          
+    - name: Regenerate golden files (if needed)
+      if: failure() && github.event_name == 'push'
+      run: |
+        echo "Regenerating golden files due to test failures..."
+        flutter test test/widget_test.dart --update-goldens
+        
+        # Check if files were updated
+        if ! git diff --exit-code test/goldens/; then
+          echo "Golden files were updated automatically"
+          
+          # Configure git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Commit the updated files
+          git add test/goldens/
+          git commit -m "Update golden files automatically [skip ci]"
+          git push
+        fi

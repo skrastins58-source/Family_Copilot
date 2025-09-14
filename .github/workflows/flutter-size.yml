@@ -1,0 +1,164 @@
+name: Flutter Bundle Size Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  # Maximum allowed APK size in MB
+  MAX_SIZE_MB: 50
+  # Maximum allowed web bundle size in MB
+  MAX_WEB_SIZE_MB: 10
+
+jobs:
+  bundle-size-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Install Flutter dependencies
+      run: flutter pub get
+      
+    - name: Build APK with size analysis
+      run: |
+        flutter build apk --analyze-size --target-platform android-arm64
+        
+        # Extract size information
+        if [ -f "build/app/outputs/flutter-apk/app-release.apk" ]; then
+          APK_SIZE=$(stat -c%s "build/app/outputs/flutter-apk/app-release.apk")
+          APK_SIZE_MB=$((APK_SIZE / 1024 / 1024))
+          echo "APK_SIZE_BYTES=$APK_SIZE" >> $GITHUB_ENV
+          echo "APK_SIZE_MB=$APK_SIZE_MB" >> $GITHUB_ENV
+          echo "APK built successfully. Size: ${APK_SIZE_MB}MB"
+        else
+          echo "APK build failed"
+          exit 1
+        fi
+        
+    - name: Build web bundle with analysis
+      run: |
+        flutter build web --analyze-size
+        
+        # Calculate web bundle size
+        if [ -d "build/web" ]; then
+          WEB_SIZE=$(du -sb build/web | cut -f1)
+          WEB_SIZE_MB=$((WEB_SIZE / 1024 / 1024))
+          echo "WEB_SIZE_BYTES=$WEB_SIZE" >> $GITHUB_ENV
+          echo "WEB_SIZE_MB=$WEB_SIZE_MB" >> $GITHUB_ENV
+          echo "Web bundle built successfully. Size: ${WEB_SIZE_MB}MB"
+        else
+          echo "Web build failed"
+          exit 1
+        fi
+        
+    - name: Generate size analysis report
+      run: |
+        cat > size-analysis.json << EOF
+        {
+          "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+          "commit": "${{ github.sha }}",
+          "branch": "${{ github.ref_name }}",
+          "apk": {
+            "size_bytes": $APK_SIZE_BYTES,
+            "size_mb": $APK_SIZE_MB,
+            "max_size_mb": $MAX_SIZE_MB,
+            "within_limit": $([ $APK_SIZE_MB -le $MAX_SIZE_MB ] && echo "true" || echo "false")
+          },
+          "web": {
+            "size_bytes": $WEB_SIZE_BYTES,
+            "size_mb": $WEB_SIZE_MB,
+            "max_size_mb": $MAX_WEB_SIZE_MB,
+            "within_limit": $([ $WEB_SIZE_MB -le $MAX_WEB_SIZE_MB ] && echo "true" || echo "false")
+          }
+        }
+        EOF
+        
+        echo "Size analysis report generated:"
+        cat size-analysis.json
+        
+    - name: Check size thresholds
+      run: |
+        # Check APK size
+        if [ $APK_SIZE_MB -gt $MAX_SIZE_MB ]; then
+          echo "⚠️ WARNING: APK size ($APK_SIZE_MB MB) exceeds threshold ($MAX_SIZE_MB MB)"
+          echo "APK_SIZE_WARNING=true" >> $GITHUB_ENV
+        else
+          echo "✅ APK size ($APK_SIZE_MB MB) is within threshold ($MAX_SIZE_MB MB)"
+          echo "APK_SIZE_WARNING=false" >> $GITHUB_ENV
+        fi
+        
+        # Check web bundle size
+        if [ $WEB_SIZE_MB -gt $MAX_WEB_SIZE_MB ]; then
+          echo "⚠️ WARNING: Web bundle size ($WEB_SIZE_MB MB) exceeds threshold ($MAX_WEB_SIZE_MB MB)"
+          echo "WEB_SIZE_WARNING=true" >> $GITHUB_ENV
+        else
+          echo "✅ Web bundle size ($WEB_SIZE_MB MB) is within threshold ($MAX_WEB_SIZE_MB MB)"
+          echo "WEB_SIZE_WARNING=false" >> $GITHUB_ENV
+        fi
+        
+    - name: Upload size analysis artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: size-analysis-${{ github.sha }}
+        path: |
+          size-analysis.json
+          build/app/outputs/flutter-apk/app-release.apk
+        retention-days: 30
+        
+    - name: Comment PR with size analysis
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          try {
+            const sizeAnalysis = JSON.parse(fs.readFileSync('size-analysis.json', 'utf8'));
+            
+            const apkStatus = sizeAnalysis.apk.within_limit ? '✅' : '⚠️';
+            const webStatus = sizeAnalysis.web.within_limit ? '✅' : '⚠️';
+            
+            const comment = `## 📦 Bundle Size Analysis
+            
+| Build Type | Size | Threshold | Status |
+|------------|------|-----------|---------|
+| APK | ${sizeAnalysis.apk.size_mb}MB | ${sizeAnalysis.apk.max_size_mb}MB | ${apkStatus} |
+| Web Bundle | ${sizeAnalysis.web.size_mb}MB | ${sizeAnalysis.web.max_size_mb}MB | ${webStatus} |
+
+${!sizeAnalysis.apk.within_limit ? '⚠️ **Warning**: APK size exceeds threshold\n' : ''}${!sizeAnalysis.web.within_limit ? '⚠️ **Warning**: Web bundle size exceeds threshold\n' : ''}
+Build artifacts available in workflow run.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          } catch (error) {
+            console.log('Could not post size analysis comment:', error);
+          }
+          
+    - name: Fail on size threshold exceeded
+      if: env.APK_SIZE_WARNING == 'true' || env.WEB_SIZE_WARNING == 'true'
+      run: |
+        echo "Bundle size check failed due to size threshold violations"
+        echo "APK warning: $APK_SIZE_WARNING"
+        echo "Web warning: $WEB_SIZE_WARNING"
+        exit 1

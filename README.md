@@ -162,37 +162,69 @@ Projekts izmanto **clean architecture** principus:
 
 Katrs slānis ir skaidri atdalīts un dokumentēts, ļaujot GitHub Copilot labāk saprast koda struktūru un sniegt precīzākus ieteikumus.
 
+## CI/CD Vizuālās Kvalitātes Validācija
+
+Family Copilot projekts izmanto progresīvu CI/CD sistēmu, kas nodrošina augstu vizuālās kvalitātes standartu:
+
+### 🔍 Lighthouse CI Integrācija
+- **Web Performance Audits**: Automātiski pārbauda web aplikācijas performance, accessibility, best practices un SEO
+- **Slieksņi**: Performance ≥70%, Accessibility ≥90%, Best Practices ≥85%, SEO ≥80%
+- **Workflow**: `.github/workflows/lighthouse.yml`
+- **Konfigurācija**: `.lighthouserc.js` ar Flutter-specifiskiem iestatījumiem
+
+### 📦 Flutter Bundle Size Monitoring
+- **APK Size Monitoring**: Maksimālais APK lielums 50MB (Android arm64)
+- **Web Bundle Tracking**: Maksimālais web bundle lielums 10MB
+- **Automātiskas brīdinājumi**: PR komentāri ar size analīzi
+- **Size Analysis Reports**: JSON formātā ar detalizētu informāciju
+
+### 🎨 Golden Tests / UI Regresijas Testi
+- **Visual Regression Testing**: Automātiski salīdzina UI komponenšu screenshots
+- **Baseline Management**: Glabā etalona attēlus `goldens/` mapē
+- **Test Coverage**: Home, Settings, Notifications screens + komponenti
+- **Dark/Light Mode**: Atsevišķi testi abiem tēmas režīmiem
+
+### 📋 Workflow Fails
+```
+.github/workflows/
+├── lighthouse.yml      # Web performance audits
+├── flutter-size.yml    # Bundle size monitoring  
+└── flutter-golden.yml  # UI regression tests
+```
+
+### 🛠 Lokālā Lietošana
+
+**Lighthouse pārbaudes:**
+```bash
+npm install
+npm run lhci:autorun
+```
+
+**Bundle size analīze:**
+```bash
+flutter build apk --analyze-size
+flutter build web --analyze-size
+```
+
+**Golden testi:**
+```bash
+# Palaisīt testus
+flutter test test/widget_test.dart
+
+# Atjaunot baseline attēlus
+flutter test test/widget_test.dart --update-goldens
+```
+
+### 🎯 Kvalitātes Metriku Uzraudzība
+
+Visi CI/CD procesi veido detalizētus ziņojumus PR komentāros:
+- Lighthouse rezultāti ar kategoriju vērtējumiem
+- Bundle size salīdzinājumi ar slieksnim
+- Golden test rezultāti ar vizuālās regresijas brīdinājumiem
+
+Šī sistēma nodrošina, ka katrs koda commit saglabā augstu vizuālās kvalitātes standartu un performance rādītājus.
+
 ## Autori
 
 Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
-=======
-# Family_Copilot
-
-# 🎵 Flutter Funkcionalitātes Uzlabojumi
-
-Šī ir Flutter aplikācija ar uzlabotu ziņu sistēmu, CI/CD automatizāciju un personalizētu lietotāja pieredzi. Projekts ir veidots ar mērķi padarīt paziņojumus interaktīvus, vizuāli pievilcīgus un lietotājam nozīmīgus.
-
-## 🚀 Funkcionalitātes
-
-- **Deep-link uz konkrētu ziņu** — lietotājs, pieskaroties paziņojumam, tiek novirzīts uz attiecīgo ziņu ekrānu.
-- **Vizuāli īpaši paziņojumi** — paziņojumi ar attēliem, ikonām un tēmas stilu.
-- **CI/CD ar Firebase Functions** — automātiska funkciju izvietošana ar GitHub Actions.
-- **Personalizēta ziņu filtrēšana** — ziņas tiek rādītas un sūtītas atbilstoši lietotāja interesēm.
-
-📌 **Zarojumu slieksnis atjaunots uz 80%** pēc visaptverošas UI testu sistēmas pievienošanas, kas nodrošina augstu koda kvalitāti un coverage metrikas.
-
-## 🧰 Tehnoloģijas
-
-- Flutter 3.x
-- Firebase (Messaging, Firestore, Functions)
-- GitHub Actions
-- flutter_local_notifications
-
-## 📦 Instalācija
-
-```bash
-git clone https://github.com/tavs-lietotajvards/flutter-funkcionalitates.git
-cd flutter-funkcionalitates
-flutter pub get
-Šis Flutter projekts uzlabo ziņu sistēmu ar deep-link navigāciju, vizuāliem paziņojumiem, CI/CD automatizāciju un personalizētu filtrēšanu. Lietotāji saņem tikai sev aktuālas ziņas, un izstrādātāji iegūst efektīvu darba plūsmu ar Firebase Functions un GitHub Actions
 

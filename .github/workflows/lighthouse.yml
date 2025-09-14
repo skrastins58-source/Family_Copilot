@@ -1,0 +1,116 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install Flutter dependencies
+      run: flutter pub get
+      
+    - name: Install npm dependencies
+      run: npm ci
+      
+    - name: Build Flutter web app
+      run: |
+        flutter build web --release
+        
+    - name: Install Python for local server
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+        
+    - name: Run Lighthouse CI
+      run: |
+        # Start local server in background
+        cd build/web && python3 -m http.server 3000 &
+        SERVER_PID=$!
+        
+        # Wait for server to start
+        sleep 10
+        
+        # Run Lighthouse CI
+        npx lhci autorun --upload.target=temporary-public-storage
+        
+        # Kill server
+        kill $SERVER_PID
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        
+    - name: Upload Lighthouse reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: lighthouse-reports
+        path: .lighthouseci/
+        retention-days: 30
+        
+    - name: Comment PR with Lighthouse results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          
+          try {
+            const resultsDir = '.lighthouseci';
+            if (fs.existsSync(resultsDir)) {
+              const files = fs.readdirSync(resultsDir);
+              const reportFile = files.find(f => f.endsWith('.json'));
+              
+              if (reportFile) {
+                const reportPath = path.join(resultsDir, reportFile);
+                const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+                
+                const scores = {
+                  performance: Math.round(report.categories.performance.score * 100),
+                  accessibility: Math.round(report.categories.accessibility.score * 100),
+                  'best-practices': Math.round(report.categories['best-practices'].score * 100),
+                  seo: Math.round(report.categories.seo.score * 100)
+                };
+                
+                const comment = `## 🔍 Lighthouse CI Results
+                
+| Category | Score |
+|----------|-------|
+| Performance | ${scores.performance}% |
+| Accessibility | ${scores.accessibility}% |
+| Best Practices | ${scores['best-practices']}% |
+| SEO | ${scores.seo}% |
+
+View detailed reports in the artifacts.`;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            }
+          } catch (error) {
+            console.log('Could not post Lighthouse results comment:', error);
+          }
