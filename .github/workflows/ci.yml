@@ -1,0 +1,107 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Analyze code
+      run: flutter analyze
+      
+    - name: Run tests with coverage
+      run: flutter test --coverage
+      
+    - name: Install lcov for coverage processing
+      run: sudo apt-get install -y lcov
+      
+    - name: Generate coverage report
+      run: |
+        genhtml coverage/lcov.info -o coverage/html
+        lcov --summary coverage/lcov.info
+        
+    - name: Check coverage thresholds
+      run: |
+        # Extract coverage percentages
+        COVERAGE_SUMMARY=$(lcov --summary coverage/lcov.info 2>&1)
+        
+        # Extract lines coverage
+        LINES_COVERAGE=$(echo "$COVERAGE_SUMMARY" | grep -o 'lines......: [0-9.]*%' | grep -o '[0-9.]*')
+        
+        # Extract functions coverage  
+        FUNCTIONS_COVERAGE=$(echo "$COVERAGE_SUMMARY" | grep -o 'functions..: [0-9.]*%' | grep -o '[0-9.]*')
+        
+        # Extract branches coverage
+        BRANCHES_COVERAGE=$(echo "$COVERAGE_SUMMARY" | grep -o 'branches...: [0-9.]*%' | grep -o '[0-9.]*')
+        
+        echo "Coverage Summary:"
+        echo "Lines: ${LINES_COVERAGE}%"
+        echo "Functions: ${FUNCTIONS_COVERAGE}%"
+        echo "Branches: ${BRANCHES_COVERAGE}%"
+        
+        # Set thresholds
+        LINES_THRESHOLD=85
+        STATEMENTS_THRESHOLD=85  # Same as lines in lcov
+        FUNCTIONS_THRESHOLD=90
+        BRANCHES_THRESHOLD=70    # Reduced from 80% as requested
+        
+        # Check thresholds
+        FAILED=0
+        
+        if (( $(echo "$LINES_COVERAGE < $LINES_THRESHOLD" | bc -l) )); then
+          echo "❌ Lines coverage ${LINES_COVERAGE}% is below threshold ${LINES_THRESHOLD}%"
+          FAILED=1
+        else
+          echo "✅ Lines coverage ${LINES_COVERAGE}% meets threshold ${LINES_THRESHOLD}%"
+        fi
+        
+        if (( $(echo "$FUNCTIONS_COVERAGE < $FUNCTIONS_THRESHOLD" | bc -l) )); then
+          echo "❌ Functions coverage ${FUNCTIONS_COVERAGE}% is below threshold ${FUNCTIONS_THRESHOLD}%"
+          FAILED=1
+        else
+          echo "✅ Functions coverage ${FUNCTIONS_COVERAGE}% meets threshold ${FUNCTIONS_THRESHOLD}%"
+        fi
+        
+        if (( $(echo "$BRANCHES_COVERAGE < $BRANCHES_THRESHOLD" | bc -l) )); then
+          echo "❌ Branches coverage ${BRANCHES_COVERAGE}% is below threshold ${BRANCHES_THRESHOLD}%"
+          FAILED=1
+        else
+          echo "✅ Branches coverage ${BRANCHES_COVERAGE}% meets threshold ${BRANCHES_THRESHOLD}%"
+        fi
+        
+        if [ $FAILED -eq 1 ]; then
+          echo "Coverage thresholds not met!"
+          exit 1
+        else
+          echo "All coverage thresholds met!"
+        fi
+        
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage/lcov.info
+        fail_ci_if_error: false
+        verbose: true
+        
+    - name: Archive coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage/html/
