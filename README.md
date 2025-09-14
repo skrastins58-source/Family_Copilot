@@ -167,6 +167,8 @@ Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izs
 - **CI/CD ar Firebase Functions** — automātiska funkciju izvietošana ar GitHub Actions.
 - **Personalizēta ziņu filtrēšana** — ziņas tiek rādītas un sūtītas atbilstoši lietotāja interesēm.
 
+📌 **Zarojumu slieksnis pagaidām samazināts uz 70%, lai nodrošinātu CI/CD plūsmas nepārtrauktību. Tiks paaugstināts pēc testu papildināšanas.**
+
 ## 🧰 Tehnoloģijas
 
 - Flutter 3.x
