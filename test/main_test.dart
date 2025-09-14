@@ -23,7 +23,7 @@ void main() {
 
     group('App Initialization Tests', () {
       testWidgets('App initializes with Provider and MaterialApp', (WidgetTester tester) async {
-        // Test: (1) App inicializāciju ar Provider un MaterialApp (main.dart)
+        // Verifies that the app initializes with Provider and MaterialApp as expected
         
         // Build the main app widget
         await tester.pumpWidget(const FamilyCopilotApp());
