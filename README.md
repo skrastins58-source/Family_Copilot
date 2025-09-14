@@ -162,6 +162,46 @@ flutter pub get
 flutter run
 ```
 
+## 🤖 CI/CD Automatizācija un Kvalitātes Kontrole
+
+### Lighthouse CI (LHCI) Konfigurācija
+
+Projekts izmanto `lighthouserc.json` optimizētu konfigurāciju performance un accessibility auditiem:
+
+```bash
+# Palaidiet LHCI lokāli
+npm install -g @lhci/cli
+lhci autorun
+```
+
+**Konfigurētie sliekšņi:**
+- 🏎️ First Contentful Paint (FCP): ≤ 2000ms
+- ⚡ Time to Interactive (TTI): ≤ 3000ms  
+- ♿ Accessibility Score: ≥ 90% (obligāts)
+- 🔍 SEO Score: ≥ 90%
+
+### PR Komentāra Automatizācija
+
+Izpildiet PR kvalitātes atskaites ģenerēšanai:
+
+```bash
+# Manuālā izpilde
+./scripts/pr_comment_automation.sh
+
+# CI/CD kontekstā (GitHub Actions)
+export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+export PR_NUMBER=${{ github.event.number }}
+./scripts/pr_comment_automation.sh
+```
+
+**Skripts apkopo:**
+- 📊 LHCI performance metrikas
+- 📦 Bundle size salīdzinājumus  
+- 🖼️ Golden test vizuālās atšķirības
+- 🧪 Coverage delta izmaiņas
+
+Rezultāts: automatisks PR komentārs ar emoji statusiem un artefaktu saitēm.
+
 ## Copilot Lietošanas Ieteikumi
 
 1. **Rakstiet skaidrus komentārus** pirms koda rakstīšanas
