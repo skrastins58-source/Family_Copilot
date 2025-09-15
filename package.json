@@ -1,0 +1,6 @@
+// index.js
+console.log("App started");
+"scripts": {
+  "dev": "node index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+}
