@@ -162,24 +162,52 @@ Projekts izmanto **clean architecture** principus:
 
 Katrs slānis ir skaidri atdalīts un dokumentēts, ļaujot GitHub Copilot labāk saprast koda struktūru un sniegt precīzākus ieteikumus.
 
+## 🖼️ Golden testi
+
+Golden testi salīdzina komponentu vizuālo izskatu ar iepriekš saglabātu attēlu (`goldens/`), lai pamanītu netīšas UI izmaiņas.
+
+### Piemērs:
+```dart
+testWidgets('MyWidget golden test', (WidgetTester tester) async {
+  await tester.pumpWidget(MyWidget());
+  await expectLater(
+    find.byType(MyWidget),
+    matchesGoldenFile('goldens/my_widget.png'),
+  );
+});
+```
+
+Golden testi tiek izpildīti CI vidē ar GitHub Actions (`flutter-golden.yml`).
+
+CI workflow satur `flutter test --update-goldens` komandu.
+
+Golden attēls jāģenerē lokāli ar:
+```bash
+flutter test --update-goldens
+```
+
+Pievieno attēlu versiju kontrolei.
+
+Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuālās kvalitātes validāciju projekta CI/CD.
+
+### Golden testu workflow:
+
+1. **Lokālā izstrāde**: Izstrādātājs izveido vai atjaunina UI komponentus
+2. **Golden attēlu ģenerēšana**: Palaiž `flutter test --update-goldens` lai izveidotu reference attēlus
+3. **Commit un push**: Pievieno jaunos golden attēlus versiju kontrolei
+4. **CI validācija**: GitHub Actions automātiski palaiž golden testus katram PR
+5. **Regression detection**: CI brīdina, ja UI ir mainījies bez golden attēlu atjaunošanas
+
+### Golden testu labās prakses:
+
+- **Konsistents fonts**: Izmanto Flutter embedded fonts testiem
+- **Deterministic content**: Izvairieties no laika atkarīgiem datiem golden testos
+- **Platform consistency**: CI izmanto Ubuntu ar Flutter 3.22.0 konsistentiem rezultātiem
+- **Minimal test scope**: Testējiet konkrētus UI komponentus, nevis veselas aplikācijas
+
 ## Autori
 
 Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
-=======
-# Family_Copilot
-
-# 🎵 Flutter Funkcionalitātes Uzlabojumi
-
-Šī ir Flutter aplikācija ar uzlabotu ziņu sistēmu, CI/CD automatizāciju un personalizētu lietotāja pieredzi. Projekts ir veidots ar mērķi padarīt paziņojumus interaktīvus, vizuāli pievilcīgus un lietotājam nozīmīgus.
-
-## 🚀 Funkcionalitātes
-
-- **Deep-link uz konkrētu ziņu** — lietotājs, pieskaroties paziņojumam, tiek novirzīts uz attiecīgo ziņu ekrānu.
-- **Vizuāli īpaši paziņojumi** — paziņojumi ar attēliem, ikonām un tēmas stilu.
-- **CI/CD ar Firebase Functions** — automātiska funkciju izvietošana ar GitHub Actions.
-- **Personalizēta ziņu filtrēšana** — ziņas tiek rādītas un sūtītas atbilstoši lietotāja interesēm.
-
-📌 **Zarojumu slieksnis atjaunots uz 80%** pēc visaptverošas UI testu sistēmas pievienošanas, kas nodrošina augstu koda kvalitāti un coverage metrikas.
 
 ## 🧰 Tehnoloģijas
 
@@ -191,8 +219,10 @@ Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izs
 ## 📦 Instalācija
 
 ```bash
-git clone https://github.com/tavs-lietotajvards/flutter-funkcionalitates.git
-cd flutter-funkcionalitates
+git clone https://github.com/skrastins58-source/Family_Copilot.git
+cd Family_Copilot
 flutter pub get
-Šis Flutter projekts uzlabo ziņu sistēmu ar deep-link navigāciju, vizuāliem paziņojumiem, CI/CD automatizāciju un personalizētu filtrēšanu. Lietotāji saņem tikai sev aktuālas ziņas, un izstrādātāji iegūst efektīvu darba plūsmu ar Firebase Functions un GitHub Actions
+flutter test --update-goldens  # Generate golden images for first run
+flutter run
+```
 
