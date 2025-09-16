@@ -8,6 +8,7 @@
       "statements": 85
     }
   }
-}
+} 
+	
 
 { "coverageThresholds": { "global": { "lines": 85, "functions": 90, "branches": 80, "statements": 85 } } } 
