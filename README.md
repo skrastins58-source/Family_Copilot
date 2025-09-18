@@ -208,7 +208,7 @@ Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuāl�
 ## Autori
 
 Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
-
+ Android 
 ## 🧰 Tehnoloģijas
 
 - Flutter 3.x
