@@ -3,6 +3,35 @@
 
 Flutter projekts, kas demonstrē GitHub Copilot labākās prakses un uzlabo ziņu sistēmu ar deep-link navigāciju, vizuāliem paziņojumiem, CI/CD automatizāciju un personalizētu filtrēšanu. Lietotāji saņem tikai sev aktuālas ziņas, un izstrādātāji iegūst efektīvu darba plūsmu ar Firebase Functions un GitHub Actions.
 
+## 🛠️ Instalācija
+
+1. Klonē repo:
+git clone https://github.com/skrastins58-source/Family_Copilot.git
+
+Kods
+2. Iej dziļāk projekta mapē:
+cd Family_Copilot
+
+Kods
+3. Instalē atkarības (piem., Flutter):
+flutter pub get
+
+Kods
+4. Palaid lokāli:
+flutter run
+
+Kods
+5. Ja izmanto Firebase: pievieno `google-services.json` (android/app/) un `GoogleService-Info.plist` (ios/Runner/).
+
+---
+
+## 🚧 Roadmap (MVP tuvākajām kārtām)
+
+- [x] Sākuma HTML/CSS lapas un assets direktorija
+- [x] Docs index + navigācija
+- [ ] "Trīs Labie Vārdi" rituāla UI un saglabāšana
+- [ ] Personalizēti avataru profili un attēlu upload
+- [ ] Notifikāciju tips pēc locekļa preferences
 ## Testēšana un Code Coverage
 
 📈 **Zarojumu slieksnis atjaunots uz 80%** - pēc visaptverošas UI testu sistēmas pievienošanas `test/main_test.dart` failā, kas nodrošina:
