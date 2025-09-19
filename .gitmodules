@@ -1,0 +1,3 @@
+[submodule "CI-CD-Symphony"]
+	path = CI-CD-Symphony
+	url = https://github.com/skrastins58-source/CI-CD-Symphony.git
