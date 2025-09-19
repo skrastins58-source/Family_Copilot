@@ -17,6 +17,10 @@ www/
 │   ├── animated-message.svg
 │   └── calendar-mockup.jpg
 ```
+## 🛠️ Instalācija
+
+1. Klonē repo:
+
 
 ## Lietošana
 
