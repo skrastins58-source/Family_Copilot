@@ -11,10 +11,10 @@ www/
 ├── family-ui.html           # Ģimenes UI sadaļa
 ├── parents_corner.html      # Vecāku stūrītis
 ├── style.css                # Kopējie stili visām lapām
-├── assets/                  # SVG un attēlu folderis
-│   ├── logo.svg
-│   ├── animated-avatar.svg
-│   ├── animated-message.svg
+├── assets/                  # PNG un attēlu folderis
+│   ├── logo.png
+│   ├── animated-avatar.png
+│   ├── animated-message.png
 │   └── calendar-mockup.jpg
 ```
 ## 🛠️ Instalācija
@@ -36,10 +36,10 @@ www/
 2. Pievieno vajadzīgo saturu, iekļauj `<link rel="stylesheet" href="style.css">` galvā.
 3. Papildini navigāciju (`nav` blokā) visās lapās ar jauno sadaļu.
 
-## Kā pievienot attēlus/SVG
+## Kā pievienot attēlus/PNG
 
 - Saglabā failu `assets/` folderī.
-- Atsaucies uz to HTML failos ar ceļu `assets/fails.svg` vai `assets/fails.jpg`.
+- Atsaucies uz to HTML failos ar ceļu `assets/fails.png` vai `assets/fails.jpg`.
 
 ## Priekšskatīšana
 
