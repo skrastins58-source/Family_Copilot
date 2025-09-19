@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" width="200" height="48" role="img" aria-label="eRuRo logo">
-  <rect rx="8" width="200" height="48" fill="#EAF8F6"/>
-  <g transform="translate(12,8)" font-family="Inter, Arial, sans-serif">
-    <circle cx="16" cy="16" r="10" fill="#6ECEDA"/>
-    <text x="40" y="22" font-size="16" fill="#0B3A57">eRuRo</text>
+  <rect rx="8" width="200" height="48" fill="#F5EFE6"/>
+  <g transform="translate(12,8)" font-family="Inter, Arial, sans-serif" fill="#2E3A59">
+    <circle cx="16" cy="16" r="10" fill="#9EC8A7"/>
+    <text x="44" y="22" font-size="16" font-weight="600">eRuRo</text>
+    <text x="44" y="37" font-size="9" fill="#6B7280">Family Copilot</text>
   </g>
 </svg>
