@@ -1,11 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="avatar">
   <defs>
-    <linearGradient id="g" x1="0" x2="1">
+    <linearGradient id="av" x1="0" x2="1">
       <stop offset="0" stop-color="#FFD7A6"/>
       <stop offset="1" stop-color="#FFB199"/>
     </linearGradient>
   </defs>
-  <rect rx="16" width="80" height="80" fill="#FFF"/>
-  <circle cx="40" cy="30" r="16" fill="url(#g)"/>
-  <rect x="18" y="48" width="44" height="18" rx="8" fill="#6ECEDA"/>
+  <rect rx="16" width="80" height="80" fill="#FFFFFF"/>
+  <circle cx="40" cy="28" r="16" fill="url(#av)"/>
+  <rect x="20" y="48" width="40" height="16" rx="8" fill="#6ECEDA"/>
+  <circle cx="32" cy="26" r="2" fill="#2E3A59"/>
+  <circle cx="48" cy="26" r="2" fill="#2E3A59"/>
 </svg>
