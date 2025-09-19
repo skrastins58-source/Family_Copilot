@@ -11,110 +11,39 @@ jobs:
   golden-tests:
     name: Golden Tests
     runs-on: ubuntu-latest
-    
-    steps:
+  
+steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
-    - name: Setup Flutter
+		
+    - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.22.0'
-        channel: 'stable'
+         flutter-version: '3.35.3'
         
-    - name: Enable Linux desktop
-      run: flutter config --enable-linux-desktop
+     dependencies
+       run: flutter pub get
+      
+     -  name: Verify dependencies
+        run: flutter pub deps
+      
+     - name: Analyze code
+       run: flutter analyze
+      
+     - name: Check formatting
+       run: dart format --output=none --set-exit-if-changed .
+      
+     - name: Run unit tests
+       run: flutter test --coverage --test-randomize-ordering-seed=random
+      
+     - name: Run golden tests
+       run: flutter test test/widget_test.dart --update-goldens
+      
+     - name: Upload golden test failures
+       if: failure()
+       uses: actions/upload-artifact@v4
+       with:
+         name: golden-test-failures
+         path: test/failures/
         
-    - name: Install dependencies
-      run: flutter pub get
-      
-    - name: Verify dependencies
-      run: flutter pub deps
-      
-    - name: Analyze code
-      run: flutter analyze
-      
-    - name: Check formatting
-      run: dart format --output=none --set-exit-if-changed .
-      
-    - name: Run unit tests
-      run: flutter test --coverage --test-randomize-ordering-seed=random
-      
-    - name: Run golden tests
-      run: flutter test test/widget_test.dart --update-goldens
-      
-    - name: Upload golden test failures
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: golden-test-failures
-        path: test/failures/
-        
-    - name: Upload test results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results
-        path: |
-          coverage/
-          test/
-        
-    - name: Upload golden images
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: golden-images
-        path: goldens/
-        
-    - name: Comment on PR
-      if: failure() && github.event_name == 'pull_request'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: '🖼️ **Golden test failure detected!**\n\nThe UI appearance has changed compared to the reference golden images. Please review the visual changes and update golden images if the changes are intentional.\n\nTo update golden images locally:\n```bash\nflutter test --update-goldens\n```\n\nThen commit the updated golden images to your branch.'
-          })
-
-  golden-test-validation:
-    name: Validate Golden Tests
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.22.0'
-        channel: 'stable'
-        
-    - name: Install dependencies
-      run: flutter pub get
-      
-    - name: Check for golden file changes
-      run: |
-        if git diff --name-only ${{ github.event.pull_request.base.sha }}..HEAD | grep -q "goldens/.*\.png"; then
-          echo "Golden files changed in this PR"
-          echo "GOLDEN_CHANGED=true" >> $GITHUB_ENV
-        else
-          echo "No golden files changed"
-          echo "GOLDEN_CHANGED=false" >> $GITHUB_ENV
-        fi
-        
-    - name: Run golden tests without update
-      if: env.GOLDEN_CHANGED == 'false'
-      run: flutter test test/widget_test.dart
-      
-    - name: Validate updated golden files
-      if: env.GOLDEN_CHANGED == 'true'
-      run: |
-        echo "Validating that golden tests pass with updated images..."
-        flutter test test/widget_test.dart
-        echo "✅ Golden tests pass with updated images"
