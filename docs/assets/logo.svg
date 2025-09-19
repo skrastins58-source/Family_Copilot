@@ -1,7 +1,0 @@
-<svg width="120" height="72" viewBox="0 0 120 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="28" cy="40" r="14" fill="#CDB4DB" stroke="#2d4fa7" stroke-width="2"/>
-  <circle cx="60" cy="28" r="18" fill="#fa8a6b" stroke="#2d4fa7" stroke-width="2"/>
-  <circle cx="92" cy="40" r="14" fill="#CDB4DB" stroke="#2d4fa7" stroke-width="2"/>
-  <ellipse cx="60" cy="54" rx="38" ry="12" fill="#F6E7D7" stroke="#B7D7B0" stroke-width="1.5"/>
-  <text x="60" y="44" font-size="21" font-family="Nunito, Arial, sans-serif" text-anchor="middle" fill="#2d4fa7" font-weight="bold">eRuRo</text>
-</svg>
