@@ -39,6 +39,9 @@ steps:
      - name: Run golden tests
        run: flutter test test/widget_test.dart --update-goldens
       
+     - name: Validate golden files consistency
+       run: ./scripts/validate_golden_files.sh
+      
      - name: Upload golden test failures
        if: failure()
        uses: actions/upload-artifact@v4

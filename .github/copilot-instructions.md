@@ -27,6 +27,25 @@ Copilot ģenerētais kods tiek pārbaudīts ar:
 - Golden testiem (`tests/golden`)
 - Bundle size validāciju (`check-bundle-size.js`)
 - Slack paziņojumiem par statusu
+- **Golden failu konsistences validāciju** (`scripts/validate_golden_files.sh`)
+
+### Golden Failu Validācijas Loģika
+
+Validācijas skripts `scripts/validate_golden_files.sh` nodrošina, ka:
+
+1. **Esamības pārbaude**: Visi testa failos norādītie golden attēli eksistē `goldens/` direktorijā
+2. **Atsauču pārbaude**: Visi golden attēli direktorijā tiek izmantoti testos (nav "bāreņu" failu)
+3. **Satura pārbaude**: Golden attēli nav tukši (nav 0 baiti)
+
+#### Automatiskā integrācija CI/CD:
+- Skripts darbojas `ci.yml` un `flutter-golden.yml` workflow
+- Kļūmes gadījumā aptur CI procesu ar informatīviem kļūdu ziņojumiem
+- Sniedz risinājumu ieteikumus kļūdu labošanai
+
+#### Kļūdu ziņojumi:
+- `❌ Referenced file missing` - Tests atsaucas uz neesošu golden failu
+- `⚠️ Orphaned golden file` - Golden fails nav izmantots testos
+- `❌ Golden file is empty` - Golden fails ir tukšs (nepareizi ģenerēts)
 
 ---
 
