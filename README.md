@@ -208,7 +208,25 @@ testWidgets('MyWidget golden test', (WidgetTester tester) async {
 
 Golden testi tiek izpildīti CI vidē ar GitHub Actions (`flutter-golden.yml`).
 
-CI workflow satur `flutter test --update-goldens` komandu.
+### 🤖 Automatizēta Kļūdu Ziņošana
+
+CI sistēma automātiski komentē PR gadījumos, kad:
+- **Golden testi neiziet**: Konstatētas vizuālās regresijas
+- **Coverage ir zem sliekšņa**: Koda pārklājums neatbilst prasībām
+- **Testi neizdodas**: Citas testu kļūdas
+
+**PR komentāru piemērs:**
+```
+🤖 Automatizēta Kļūdu Ziņošana
+
+🖼️ Golden Testu Kļūdas
+- ❌ my_widget: Golden test mismatch - UI izmaiņas konstatētas
+
+📊 Coverage Problēmas  
+| Metrika | Pašreizējais | Sliekšņa | Status |
+|---------|-------------|----------|--------|
+| Lines   | 71.4%       | 85%      | ❌     |
+```
 
 Golden attēls jāģenerē lokāli ar:
 ```bash
