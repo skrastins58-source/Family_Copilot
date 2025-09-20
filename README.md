@@ -234,6 +234,25 @@ Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuāl�
 - **Platform consistency**: CI izmanto Ubuntu ar Flutter 3.22.0 konsistentiem rezultātiem
 - **Minimal test scope**: Testējiet konkrētus UI komponentus, nevis veselas aplikācijas
 
+### Golden testu struktūras validācija:
+
+Golden testu infrastruktūra ietver automātisku struktūras validāciju:
+
+- **Direktoriju pārbaude**: Pārbauda, vai `goldens/` un `diff/` direktorijas eksistē
+- **Failu atbilstība**: Katram golden testam pārbauda atbilstošu failu esamību
+- **Orphaned failu noteikšana**: Identificē failus, kas nav atsauci testos
+- **Automātiska izveide**: Izveido trūkstošos diff failus kā tukšus placeholder
+
+Validāciju var palaist atsevišķi:
+```bash
+./scripts/validate_golden_structure.sh
+```
+
+Vai kā daļu no pilnas validācijas:
+```bash
+./validate.sh
+```
+
 ## Autori
 
 Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
