@@ -2,6 +2,15 @@
 {
   "scripts": {
     "dev": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lighthouse": "lhci autorun",
+    "lighthouse:desktop": "lhci autorun --collect.settings.formFactor=desktop",
+    "validate-html": "html-validate docs/*.html",
+    "validate-accessibility": "pa11y docs/landing.html"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.12.0",
+    "html-validate": "^8.7.4",
+    "pa11y": "^7.0.0"
   }
 }

@@ -1,0 +1,31 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./docs",
+      "numberOfRuns": 3,
+      "settings": {
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage"
+      },
+      "url": [
+        "http://localhost/landing.html",
+        "http://localhost/index.html",
+        "http://localhost/kapec.html",
+        "http://localhost/family-ui.html",
+        "http://localhost/parents_corner.html"
+      ]
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", {"minScore": 0.8}],
+        "categories:accessibility": ["error", {"minScore": 0.95}],
+        "categories:best-practices": ["warn", {"minScore": 0.9}],
+        "categories:seo": ["error", {"minScore": 0.9}],
+        "categories:pwa": "off"
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci"
+    }
+  }
+}
