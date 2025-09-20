@@ -1,7 +1,8 @@
-name: Flutter Golden Tests
+name: CI Golden Tests
 
 on:
   pull_request:
+    branches: [ main, master, develop ]
     paths:
       - "lib/**"
       - "test/golden/**"
@@ -9,6 +10,9 @@ on:
       - "scripts/**"
       - ".github/workflows/ci-golden.yml"
       - "pubspec.yaml"
+  push:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -62,6 +66,7 @@ jobs:
           fi
 
       - name: Generate PR comment
+        if: github.event_name == 'pull_request'
         run: node scripts/post-pr-summary.js
         env:
           GOLDEN_ARTIFACT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
