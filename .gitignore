@@ -102,3 +102,5 @@ test/failures/
 # Golden tests - commit golden images but not failure directories
 # goldens/*.png should be committed
 test/**/failures/
+test/diff/
+validation_report.md

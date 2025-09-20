@@ -206,13 +206,35 @@ testWidgets('MyWidget golden test', (WidgetTester tester) async {
 });
 ```
 
-Golden testi tiek izpildīti CI vidē ar GitHub Actions (`flutter-golden.yml`).
+### CI/CD Validācija:
 
-CI workflow satur `flutter test --update-goldens` komandu.
+Golden testi tiek izpildīti CI vidē ar GitHub Actions (`flutter-golden.yml`) ar pilnu validācijas sistēmu:
+
+- **Strukturālā validācija**: Automatiska attēlu nosaukumu un struktūras pārbaude
+- **Salīdzinājuma skripts**: Ģenerē diff attēlus neizdevušos testu gadījumā  
+- **PR komentāri**: Automātiskie ziņojumi par golden testu kļūdām
+- **Artefaktu augšupielāde**: Salīdzinājuma attēli pieejami kā workflow artefakti
+
+### Lokālā izstrāde:
 
 Golden attēls jāģenerē lokāli ar:
 ```bash
-flutter test --update-goldens
+flutter test test/widget_test.dart --update-goldens
+```
+
+Vai izmantojot palīgskriptu:
+```bash
+./generate_goldens.sh
+```
+
+### Validācijas skripti:
+
+```bash
+# Validēt golden testu struktūru
+./scripts/validate_golden_structure.sh
+
+# Palaist pilnu golden testu salīdzinājumu
+./scripts/compare_golden_tests.sh
 ```
 
 Pievieno attēlu versiju kontrolei.
