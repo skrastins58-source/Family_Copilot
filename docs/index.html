@@ -2,29 +2,52 @@
 <html lang="lv">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="eRuRo — digitāla platforma siltai ģimenes saziņai, kopīgām atmiņām un rituāliem. Palīdz ģimenei būt tuvāk emocionāli.">
+  <meta name="keywords" content="ģimene, saziņa, digitāla platforma, copilot, atmiņas, rituāli">
+  <meta name="author" content="Family Copilot Team">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph meta tags for social sharing -->
+  <meta property="og:title" content="eRuRo — Ģimenes Copilot">
+  <meta property="og:description" content="Digitāla platforma siltai saziņai, kopīgām atmiņām un ģimenes rituāliem.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://skrastins58-source.github.io/Family_Copilot/">
+  <meta property="og:image" content="https://skrastins58-source.github.io/Family_Copilot/assets/logo.svg">
+  <meta property="og:locale" content="lv_LV">
+  
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="eRuRo — Ģimenes Copilot">
+  <meta name="twitter:description" content="Digitāla platforma siltai saziņai, kopīgām atmiņām un ģimenes rituāliem.">
+  <meta name="twitter:image" content="https://skrastins58-source.github.io/Family_Copilot/assets/logo.svg">
+  
   <title>eRuRo — Ģimenes Copilot</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
+  <!-- Skip navigation link for accessibility -->
+  <a href="#main-content" class="skip-link">Iet uz galveno saturu</a>
+  
+  <header role="banner">
     <div class="logo"><img src="assets/logo.svg" alt="eRuRo logo" height="48"></div>
-    <nav>
+    <nav role="navigation" aria-label="Galvenā navigācija">
       <ul>
-        <li><a href="index.html" class="active">Sākums</a></li>
+        <li><a href="index.html" class="active" aria-current="page">Sākums</a></li>
         <li><a href="kapec.html">Kāpēc</a></li>
         <li><a href="family-ui.html">Ģimenes UI</a></li>
         <li><a href="parents_corner.html">Vecāku stūrītis</a></li>
       </ul>
     </nav>
   </header>
-  <main>
-    <section class="hero">
-      <h1>eRuRo — Ģimenes Copilot</h1>
+  <main id="main-content" role="main">
+    <section class="hero" aria-labelledby="hero-heading">
+      <h1 id="hero-heading">eRuRo — Ģimenes Copilot</h1>
       <p>Digitāla platforma siltai saziņai, kopīgām atmiņām un ģimenes rituāliem.</p>
-      <a href="kapec.html" class="cta-btn">Uzzini, kāpēc tas ir svarīgi</a>
+      <a href="kapec.html" class="cta-btn" aria-describedby="hero-heading">Uzzini, kāpēc tas ir svarīgi</a>
     </section>
   </main>
-  <footer>
+  <footer role="contentinfo">
     <p>&copy; 2025 eRuRo</p>
   </footer>
 </body>
