@@ -1,6 +1,10 @@
 
 # Family Copilot
 
+[![CI](https://github.com/skrastins58-source/Family_Copilot/actions/workflows/ci.yml/badge.svg)](https://github.com/skrastins58-source/Family_Copilot/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-80%25-brightgreen.svg)](https://github.com/skrastins58-source/Family_Copilot/actions/workflows/ci.yml)
+[![Golden Tests](https://github.com/skrastins58-source/Family_Copilot/actions/workflows/flutter-golden.yml/badge.svg)](https://github.com/skrastins58-source/Family_Copilot/actions/workflows/flutter-golden.yml)
+
 Flutter projekts, kas demonstrē GitHub Copilot labākās prakses un uzlabo ziņu sistēmu ar deep-link navigāciju, vizuāliem paziņojumiem, CI/CD automatizāciju un personalizētu filtrēšanu. Lietotāji saņem tikai sev aktuālas ziņas, un izstrādātāji iegūst efektīvu darba plūsmu ar Firebase Functions un GitHub Actions.
 
 ## 🛠️ Instalācija
@@ -233,6 +237,41 @@ Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuāl�
 - **Deterministic content**: Izvairieties no laika atkarīgiem datiem golden testos
 - **Platform consistency**: CI izmanto Ubuntu ar Flutter 3.22.0 konsistentiem rezultātiem
 - **Minimal test scope**: Testējiet konkrētus UI komponentus, nevis veselas aplikācijas
+
+## 🤝 Sabiedrības iesaiste
+
+Mēs vienmēr meklējam jaunus izstrādātājus, kas vēlas piedalīties Family Copilot attīstībā!
+
+### 🌟 Kā tu vari palīdzēt
+
+- **🐛 Bug ziņojumi** - Paziņo par problēmām vai neparedzētu uzvedību
+- **✨ Jaunu funkciju izstrāde** - Ierosini un implementē jaunas iespējas
+- **📚 Dokumentācijas uzlabojumi** - Palīdz uzlabot instrukcijas un piemērus
+- **🧪 Testēšana** - Paplašini test coverage un golden testus
+- **🔍 Code review** - Dalies ar savu pieredzi un ieteikumiem
+
+### 🚀 Kā sākt
+
+1. **Izpēti projektu** - Iepazīsties ar [CONTRIBUTING.md](CONTRIBUTING.md)
+2. **Izvēlies uzdevumu** - Meklē issues ar `good first issue` tagu
+3. **Fork un klonē** - Izveido savu kopiju repozitorijam
+4. **Izstrādā un testē** - Seko mūsu kvalitātes standartiem
+5. **Izveido PR** - Dalies ar savām izmaiņām
+
+### 📊 Kvalitātes kritēriji
+
+- ✅ **80% test coverage** - Visi jaunie funkcijām jābūt testētiem
+- ✅ **Golden test validation** - UI izmaiņas jāvalidē ar golden testiem
+- ✅ **Clean code** - Seko Flutter un Dart best practices
+- ✅ **Documentation** - Pievienojiet komentārus un README atjauninājumus
+
+### 🏷️ Contributor badges
+
+[![Contributors](https://img.shields.io/github/contributors/skrastins58-source/Family_Copilot.svg)](https://github.com/skrastins58-source/Family_Copilot/graphs/contributors)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![First Timers Only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/)
+
+Katrs contributors tiek atzīmēts mūsu README un release notes! 🎉
 
 ## Autori
 
