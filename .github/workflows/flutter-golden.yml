@@ -11,42 +11,40 @@ jobs:
   golden-tests:
     name: Golden Tests
     runs-on: ubuntu-latest
-  
-steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-		
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-         flutter-version: '3.35.3'
-        
-     dependencies
-       run: flutter pub get
-      
-     -  name: Verify dependencies
-        run: flutter pub deps
-      
-     - name: Analyze code
-       run: flutter analyze
-      
-     - name: Check formatting
-       run: dart format --output=none --set-exit-if-changed .
-      
-     - name: Run unit tests
-       run: flutter test --coverage --test-randomize-ordering-seed=random
-      
-     - name: Run golden tests
-       run: flutter test test/widget_test.dart --update-goldens
-      
-     - name: Validate golden files consistency
-       run: ./scripts/validate_golden_files.sh
-      
-     - name: Upload golden test failures
-       if: failure()
-       uses: actions/upload-artifact@v4
-       with:
-         name: golden-test-failures
-         path: test/failures/
-        
     
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.25.0'
+          
+      - name: Get dependencies
+        run: flutter pub get
+        
+      - name: Verify dependencies
+        run: flutter pub deps
+        
+      - name: Analyze code
+        run: flutter analyze
+        
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+        
+      - name: Run unit tests
+        run: flutter test --coverage --test-randomize-ordering-seed=random
+        
+      - name: Run golden tests
+        run: flutter test test/widget_test.dart --update-goldens
+        
+      - name: Validate golden files consistency
+        run: ./scripts/validate_golden_files.sh
+        
+      - name: Upload golden test failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-test-failures
+          path: test/failures/
