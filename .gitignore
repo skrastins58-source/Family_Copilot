@@ -97,6 +97,7 @@ flutter/
 
 # Test related
 coverage/
+!coverage/coverage-badge.json
 test/failures/
 
 # Golden tests - commit golden images but not failure directories

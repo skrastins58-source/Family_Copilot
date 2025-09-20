@@ -1,6 +1,9 @@
 
 # Family Copilot
 
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/skrastins58-source/Family_Copilot/main/coverage/coverage-badge.json)](https://github.com/skrastins58-source/Family_Copilot/tree/main/coverage)
+[![CI](https://github.com/skrastins58-source/Family_Copilot/workflows/CI/badge.svg)](https://github.com/skrastins58-source/Family_Copilot/actions)
+
 Flutter projekts, kas demonstrē GitHub Copilot labākās prakses un uzlabo ziņu sistēmu ar deep-link navigāciju, vizuāliem paziņojumiem, CI/CD automatizāciju un personalizētu filtrēšanu. Lietotāji saņem tikai sev aktuālas ziņas, un izstrādātāji iegūst efektīvu darba plūsmu ar Firebase Functions un GitHub Actions.
 
 ## 🛠️ Instalācija
@@ -33,6 +36,29 @@ Kods
 - [ ] Personalizēti avataru profili un attēlu upload
 - [ ] Notifikāciju tips pēc locekļa preferences
 ## Testēšana un Code Coverage
+
+🔧 **Automatizēta coverage sistēma** - projekts izmanto integrētu coverage rīku sistēmu:
+
+- **Coverage badge** - automātiski atjaunināts coverage indikators README augšpusē
+- **Threshold pārbaude** - branches: 80%, lines: 85%, functions: 90%
+- **PR komentāri** - automātiski coverage pārskati PR diskusijās
+- **CI/CD integrācija** - coverage tiek pārbaudīts katrā pull request
+
+### Coverage Komandas
+
+```bash
+# Palaiž testus ar coverage
+flutter test --coverage
+
+# Pārbauda coverage thresholds
+./scripts/check_coverage.sh
+
+# Ģenerē coverage badge
+./scripts/generate_coverage_badge.sh
+
+# Pilna validācija
+./validate.sh
+```
 
 📈 **Zarojumu slieksnis atjaunots uz 80%** - pēc visaptverošas UI testu sistēmas pievienošanas `test/main_test.dart` failā, kas nodrošina:
 
