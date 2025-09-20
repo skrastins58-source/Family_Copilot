@@ -223,9 +223,10 @@ Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuāl�
 
 1. **Lokālā izstrāde**: Izstrādātājs izveido vai atjaunina UI komponentus
 2. **Golden attēlu ģenerēšana**: Palaiž `flutter test --update-goldens` lai izveidotu reference attēlus
-3. **Commit un push**: Pievieno jaunos golden attēlus versiju kontrolei
-4. **CI validācija**: GitHub Actions automātiski palaiž golden testus katram PR
-5. **Regression detection**: CI brīdina, ja UI ir mainījies bez golden attēlu atjaunošanas
+3. **Struktūras validācija**: Palaiž `./scripts/validate_golden_structure.sh` lai pārbaudītu pareizu struktūru
+4. **Commit un push**: Pievieno jaunos golden attēlus versiju kontrolei
+5. **CI validācija**: GitHub Actions automātiski palaiž golden testus katram PR
+6. **Regression detection**: CI brīdina, ja UI ir mainījies bez golden attēlu atjaunošanas
 
 ### Golden testu labās prakses:
 

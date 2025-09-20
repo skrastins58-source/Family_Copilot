@@ -54,6 +54,24 @@ flutter test test/widget_test.dart
 1. **Development**: Make UI changes
 2. **Generate**: Run `./generate_goldens.sh` or `flutter test --update-goldens`
 3. **Review**: Check generated images match expectations
-4. **Commit**: Add golden images to version control
-5. **CI Validation**: GitHub Actions validates on PR
+4. **Validate**: Run `./scripts/validate_golden_structure.sh` to ensure proper structure
+5. **Commit**: Add golden images to version control
+6. **CI Validation**: GitHub Actions validates on PR
+
+## Structure Validation:
+
+Use the validation script to ensure proper golden test structure:
+
+```bash
+# Validate golden test structure
+./scripts/validate_golden_structure.sh
+```
+
+This script validates:
+- All required directories exist (goldens/, tests/diff/, test/)
+- Each golden test has corresponding files in both directories
+- No orphaned files exist
+- Proper file structure is maintained
+
+The script provides detailed output with information, warnings, and errors, making it easy to identify and fix structural issues.
 coment added
