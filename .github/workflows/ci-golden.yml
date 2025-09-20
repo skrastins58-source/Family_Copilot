@@ -1,13 +1,32 @@
+name: Flutter Golden Tests
+
+on:
+  pull_request:
+    paths:
+      - "lib/**"
+      - "test/golden/**"
+      - "goldens/**"
+      - "scripts/**"
+      - ".github/workflows/ci-golden.yml"
+      - "pubspec.yaml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   golden:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6'
+          flutter-version: '3.35.4'
 
       - name: Fetch default branch safely
         run: |
@@ -18,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Validate golden structure
+        run: bash scripts/validate_golden_structure.sh
+
       - name: Run golden test
         run: flutter test --update-goldens test/golden/golden_notification_preview.dart
 
@@ -25,11 +47,29 @@ jobs:
         run: bash scripts/check_golden_diff.sh ${{ github.event.repository.default_branch }}
 
       - name: Upload golden artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
-          name: notification_preview.png
+          name: notification_preview
           path: goldens/notification_preview.png
 
-      - name: Post PR summary (optional)
-        if: github.event_name == 'pull_request'
+      - name: Determine NOTIF_IMAGE_STATUS
+        run: |
+          if [ -f goldens/notification_preview.png ]; then
+            echo "NOTIF_IMAGE_STATUS=success" >> $GITHUB_ENV
+          else
+            echo "NOTIF_IMAGE_STATUS=fail" >> $GITHUB_ENV
+          fi
+
+      - name: Generate PR comment
         run: node scripts/post-pr-summary.js
+        env:
+          GOLDEN_ARTIFACT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          NOTIF_IMAGE_STATUS: ${{ env.NOTIF_IMAGE_STATUS }}
+          CI_COVERAGE_SUMMARY: ${{ steps.coverage.outputs.summary || '' }}
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file pr-comment.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
