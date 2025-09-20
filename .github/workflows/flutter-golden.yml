@@ -34,3 +34,14 @@ jobs:
 
       - name: Run unit tests
         run: flutter test
+
+      - name: Validate golden test structure
+        run: bash scripts/validate_golden_structure.sh
+
+      - name: Upload golden artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-artifacts
+          path: |
+            goldens
+            diff
