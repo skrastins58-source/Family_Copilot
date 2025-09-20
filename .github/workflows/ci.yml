@@ -73,11 +73,19 @@ jobs:
         with:
           flutter-version: ${{ secrets.FLUTTER_VERSION }}
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bc
+
       - name: Get dependencies
         run: flutter pub get
 
       - name: Run unit & widget tests with coverage
         run: flutter test --coverage
+
+      - name: Generate coverage badge
+        run: scripts/generate_coverage_badge.sh
 
       - name: Enforce coverage thresholds
         run: scripts/check_coverage.sh
@@ -87,6 +95,15 @@ jobs:
         with:
           name: coverage-report
           path: coverage
+
+      - name: Commit coverage badge (if on main branch)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add coverage/coverage-badge.json
+          git diff --staged --quiet || git commit -m "Update coverage badge [skip ci]"
+          git push
 
       - name: Run golden tests
         run: flutter test
@@ -108,11 +125,56 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Post PR summary
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: node post-pr-summary.js
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y bc
+
+      - name: Generate coverage comment
+        id: coverage
+        run: |
+          echo "coverage_comment<<EOF" >> $GITHUB_OUTPUT
+          scripts/pr_coverage_comment.sh >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const coverageComment = `${{ steps.coverage.outputs.coverage_comment }}`;
+            
+            // Find existing coverage comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            
+            const existingComment = comments.data.find(comment => 
+              comment.body.includes('📊 Coverage Report')
+            );
+            
+            if (existingComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: coverageComment
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: coverageComment
+              });
+            }
 permissions:
   contents: read
   packages: write
