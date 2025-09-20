@@ -36,7 +36,7 @@ jobs:
         run: flutter test
 
       - name: Validate golden test structure
-        run: bash scripts/validate_golden_structure.sh
+        run: bash scripts/validate_golden_structure.sh --strict
 
       - name: Upload golden artifacts
         uses: actions/upload-artifact@v4
