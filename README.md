@@ -234,6 +234,62 @@ Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuāl�
 - **Platform consistency**: CI izmanto Ubuntu ar Flutter 3.22.0 konsistentiem rezultātiem
 - **Minimal test scope**: Testējiet konkrētus UI komponentus, nevis veselas aplikācijas
 
+## 🌐 SEO un Pieejamības Prasības
+
+Family Copilot īsteno augstus SEO un pieejamības standartus gan Flutter aplikācijā, gan HTML lapās, nodrošinot pieejamību visiem lietotājiem:
+
+### 📱 Flutter Aplikācija - Accessibility Features:
+
+- **Semantics**: Visi UI komponenti ir paziņoti ar `Semantics` widget'iem
+- **Screen Reader Support**: Pilns atbalsts VoiceOver (iOS) un TalkBack (Android)
+- **Keyboard Navigation**: Navigācija bez peles/touch supports
+- **High Contrast**: Atbalsts paaugstināta kontrasta režīmam
+- **Font Scaling**: Dinamisks teksta mērogs pēc sistēmas iestatījumiem
+- **Color Blind Friendly**: Krāsu kombinācijas ar WCAG 2.1 AA standartiem
+
+```dart
+// Piemērs: Semantics izmantošana
+Semantics(
+  label: 'Pievienot ģimenes locekli',
+  hint: 'Dubultklikšķis lai atvērtu formu',
+  child: FloatingActionButton(
+    onPressed: _addFamilyMember,
+    child: Icon(Icons.add),
+  ),
+)
+```
+
+### 🌐 HTML Lapas - SEO un Accessibility:
+
+- **HTML5 Semantic Elements**: `<header>`, `<nav>`, `<main>`, `<section>`, `<footer>`
+- **ARIA Labels**: Pilns ARIA atribūtu atbalsts screen reader'iem
+- **Alt Text**: Visiem attēliem pievienoti apraksti
+- **Meta Tags**: Optimizēti SEO meta tagi katrai lapai
+- **Language Support**: `lang="lv"` atribūts latviešu valodas atbalstam
+- **Mobile First**: Responsive design ar mobile-first pieeju
+
+### 🔍 SEO Optimizācijas:
+
+- **Structured Data**: JSON-LD markup semantikai
+- **Open Graph**: Facebook/LinkedIn dalīšanās optimizācija
+- **Twitter Cards**: Twitter posts preview optimizācija  
+- **Sitemap**: Automātiski ģenerēts sitemap.xml
+- **Robots.txt**: Meklētājprogrammu navigācijas vadība
+
+### ✅ Automated Testing:
+
+- **htmlhint**: Automātiska HTML validācija CI procesā
+- **axe-core**: Accessibility testēšana (plānots)
+- **Golden Tests**: UI accessibility regression novēršana ar screen reader simulāciju
+- **Lighthouse CI**: Performance un accessibility score izsekošana
+
+### 📊 Compliance Standards:
+
+- **WCAG 2.1 AA**: Web Content Accessibility Guidelines
+- **Section 508**: US Federal accessibility requirements  
+- **EN 301 549**: Eiropas accessibility standarts
+- **HTML5 Validation**: W3C markup validation
+
 ## Autori
 
 Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
