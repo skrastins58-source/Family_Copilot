@@ -99,3 +99,11 @@ google-services.json
 # Temporary Flutter installation files
 flutter.tar.xz
 flutter/
+
+# Test related
+coverage/
+test/failures/
+
+# Golden tests - commit golden images but not failure directories
+# goldens/*.png should be committed
+test/**/failures/

@@ -157,13 +157,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: npx semantic-release
-
   notify:
     name: Notify
     runs-on: ubuntu-latest
