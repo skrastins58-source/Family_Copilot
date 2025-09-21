@@ -41,7 +41,16 @@ jobs:
       - name: Upload golden artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: golden-artifacts
+          name: golden-artifacts@4
           path: |
-            goldens
-            diff
+             goldens/expected/
+             goldens/actual/
+             goldens/diff/
+
+if: failure()
+  runs-on:
+      call-ui-tests:
+         uses: skrastins58-source/Family_Copilot/.github/workflows/ui-test.yml@main
+         with:
+             coverage-threshold: 80 
+             secret: GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
