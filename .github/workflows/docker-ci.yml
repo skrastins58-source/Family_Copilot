@@ -1,9 +1,11 @@
 name: Docker CI with GHCR and Staging Deploy
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
   build-test-push-deploy:
     runs-on: ubuntu-latest
@@ -11,49 +13,48 @@ jobs:
       docker:
         image: docker:20.10.16-dind
         options: --privileged
+
     steps:
-      - name: Checkout code
+      - name: 🧾 Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Fetch default branch safely
+      - name: 🔄 Fetch origin/main safely
         run: |
-          echo "Fetching default branch: ${{ github.event.repository.default_branch }}"
-          git fetch --no-tags --prune --depth=1 origin \
-            ${{ github.event.repository.default_branch }}:refs/remotes/origin/${{ github.event.repository.default_branch }}
-      - name: Clone CI-CD-Symphony
+          echo "Fetching origin/main for diff and validation"
+          git fetch origin main
+
+      - name: 🧬 Clone CI-CD-Symphony
         run: git clone https://github.com/skrastins58-source/CI-CD-Symphony.git CI-CD-Symphony
-        
-      - name: Set up Docker Buildx
+
+      - name: 🐳 Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to GHCR
+      - name: 🔐 Log in to GHCR
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ secrets.GHCR_SKRASTINS58SOURCE }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: Build and test CI-CD-Symphony
+      - name: 🧪 Build and test CI-CD-Symphony
         run: |
           docker build -t ghcr.io/janis/family_copilot_monorepo/ci-cd-symphony:latest ./CI-CD-Symphony
           docker run --rm ghcr.io/janis/family_copilot_monorepo/ci-cd-symphony:latest npm test
 
-      - name: Build and test Family_Copilot
+      - name: 🧪 Build and test Family_Copilot
         run: |
           docker build -t ghcr.io/janis/family_copilot_monorepo/family_copilot:latest ./Family_Copilot
           docker run --rm ghcr.io/janis/family_copilot_monorepo/family_copilot:latest npm test
 
-      - name: Push CI-CD-Symphony image to GHCR
-        run: |
-          docker push ghcr.io/janis/family_copilot_monorepo/ci-cd-symphony:latest
+      - name: 🚚 Push CI-CD-Symphony image to GHCR
+        run: docker push ghcr.io/janis/family_copilot_monorepo/ci-cd-symphony:latest
 
-      - name: Push Family_Copilot image to GHCR
-        run: |
-          docker push ghcr.io/janis/family_copilot_monorepo/family_copilot:latest
+      - name: 🚚 Push Family_Copilot image to GHCR
+        run: docker push ghcr.io/janis/family_copilot_monorepo/family_copilot:latest
 
-      - name: Deploy to Staging
+      - name: 🚀 Deploy to Staging
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.STAGING_HOST }}
@@ -63,8 +64,3 @@ jobs:
             cd /path/to/your/docker-compose
             docker-compose pull
             docker-compose up -d
-
-
-
-
-
