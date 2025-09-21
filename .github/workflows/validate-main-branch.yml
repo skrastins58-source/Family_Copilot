@@ -13,8 +13,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch main branch
-        run: git fetch origin main:main
+      - name: Fetch main branch safely
+        run: |
+          # Fetch remote main branch without trying to update checked-out branch
+          # This prevents "fatal: refusing to fetch into branch" error in CI
+          git fetch origin main
 
       - name: Validate git diff
         run: |

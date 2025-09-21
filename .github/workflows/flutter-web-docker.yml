@@ -32,9 +32,9 @@ jobs:
         run: |
           docker run --rm flutter-web-app test -f /usr/share/nginx/html/index.html
 
-      - name: 📦 Optional: Save image as artifact
+      - name: 📦 Optional:Save image as artifact
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-web-app-image
           path: /usr/share/nginx/html
