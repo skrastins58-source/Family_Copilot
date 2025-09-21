@@ -31,18 +31,12 @@ void main() {
       // Compare the widget appearance with golden file
       await expectLater(
         find.byType(Container),
-        matchesGoldenFile('goldens/my_widget.png'),
-      );
-    });
-
-    testWidgets('MyWidget text golden test', (WidgetTester tester) async {
-      // Test just the text widget for more focused golden testing
-      final textWidget = MaterialApp(
-        home: Material(
-          child: Center(
-            child: Text(
-              'Golden!',
-              style: TextStyle(
+        matchesGoldenFi(const MmmmMaterialApp(
+        home:const Material(
+          child:const Center(
+            child:const Text(
+              'constGolden!',
+              style:const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
