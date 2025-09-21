@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:family_copilot/widgets/notification_preview.dart';
 
 void main() {
   group('Golden Tests', () {
-    testWidgets(const'Simple text golden test', (WidgetTester tester) async {
-      final widget =const MaterialApp(
-        home:const Scaffold(
-          body:const Center(
+    testWidgets('Simple text golden test', (WidgetTester tester) async {
+      final widget = MaterialApp(
+        home: Scaffold(
+          body: Center(
             child: const Text(
               'Golden!',
               style: TextStyle(
@@ -34,20 +35,20 @@ void main() {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home:const Scaffold(
-          body:const Center(
-            child:const Container(
+        home: Scaffold(
+          body: Center(
+            child: Container(
               width: 200,
               height: 100,
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade50,
-                borderRadius:const BorderRadius.circular(8),
-                border:const Border.all(color: Colors.deepPurple, width: 2),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.deepPurple, width: 2),
               ),
               child: const Center(
-                child:const Text(
-                  const'Golden!',
-                  style:const TextStyle(
+                child: Text(
+                  'Golden!',
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.deepPurple,
@@ -59,7 +60,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(const.widget);
+      await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
 
       await expectLater(
