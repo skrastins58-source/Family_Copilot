@@ -1,7 +1,6 @@
----
 name: Flutter Golden Tests
 
-"on":
+on:
   pull_request:
     branches: [main, master, develop]
   push:
@@ -50,7 +49,7 @@ jobs:
           path: test/failures/
 
       - name: Comment PR on golden test failure
-        if: failure() && github.event_name == 'pull_request'
+        if: failure() &&  ${{ github.event_name == 'pull_request' }}
         uses: actions/github-script@v7
         with:
           script: |
