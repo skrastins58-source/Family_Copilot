@@ -1,4 +1,6 @@
+
 name: family_copilot
+
 description: A Flutter project that demonstrates GitHub Copilot best practices with notification system, deep-link navigation, and personalized filtering.
 
 version: 1.0.0+1
