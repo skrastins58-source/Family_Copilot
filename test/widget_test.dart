@@ -107,5 +107,97 @@ void main() {
         matchesGoldenFile('goldens/material_container.png'),
       );
     });
+
+    testWidgets('Screen Reader Accessibility Golden Test', (WidgetTester tester) async {
+      // Test widget with proper accessibility features for screen readers
+      final accessibilityWidget = MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Screen reader accessible button
+                Semantics(
+                  label: 'Ģimenes pogas piemērs',
+                  hint: 'Nospied, lai pievienotu jaunu ģimenes locekli',
+                  button: true,
+                  child: Container(
+                    width: 200,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.deepPurple,
+                        width: 2,
+                      ),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '+ Pievienot',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.deepPurple,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Screen reader accessible text with proper heading semantics
+                Semantics(
+                  header: true,
+                  label: 'Family Copilot galvenais virsraksts',
+                  child: const Text(
+                    'Family Copilot',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Accessible descriptive text
+                Semantics(
+                  label: 'Apraksts: Ģimenes saziņas platforma ar mīlestību',
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: const Text(
+                      'Ģimenes saziņas platforma\nar mīlestību ❤️',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(accessibilityWidget);
+      await tester.pumpAndSettle();
+
+      // Verify accessibility elements are present
+      expect(find.bySemanticsLabel('Ģimenes pogas piemērs'), findsOneWidget);
+      expect(find.bySemanticsLabel('Family Copilot galvenais virsraksts'), findsOneWidget);
+      expect(find.bySemanticsLabel('Apraksts: Ģimenes saziņas platforma ar mīlestību'), findsOneWidget);
+
+      // Generate golden file with accessibility features visible
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/accessibility_screen_reader.png'),
+      );
+    });
   });
 }

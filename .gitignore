@@ -102,3 +102,7 @@ test/failures/
 # Golden tests - commit golden images but not failure directories
 # goldens/*.png should be committed
 test/**/failures/
+
+# Node.js dependencies
+node_modules/
+package-lock.json

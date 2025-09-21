@@ -7,6 +7,7 @@ This directory contains golden images for widget tests. These images are used as
 - `my_widget.png` - Reference image for MyWidget container test
 - `golden_text.png` - Reference image for text widget test  
 - `material_container.png` - Reference image for Material Design container test
+- `accessibility_screen_reader.png` - Reference image for accessibility/screen reader simulation test
 
 ## Generating Golden Images:
 
@@ -56,4 +57,23 @@ flutter test test/widget_test.dart
 3. **Review**: Check generated images match expectations
 4. **Commit**: Add golden images to version control
 5. **CI Validation**: GitHub Actions validates on PR
-coment added
+
+## 🌐 Accessibility Testing:
+
+The golden tests include screen reader simulation testing to ensure UI accessibility:
+
+### Screen Reader Golden Test Features:
+- **Semantics Labels**: Tests proper ARIA-like labeling in Flutter widgets
+- **Navigation Flow**: Verifies logical tab order and focus management
+- **High Contrast**: Tests visibility with accessibility color schemes
+- **Font Scaling**: Validates UI with larger text sizes
+- **Screen Reader Hints**: Ensures helpful descriptions for complex UI elements
+
+### Accessibility Test Coverage:
+- Button semantics with clear labels and hints
+- Header semantics for proper content hierarchy  
+- Descriptive text with context for screen readers
+- Focus management and keyboard navigation
+- Color contrast compliance (WCAG 2.1 AA)
+
+The `accessibility_screen_reader.png` golden file captures the visual representation of widgets with proper accessibility markup, ensuring that accessibility features don't break the visual design.

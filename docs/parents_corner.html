@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vecāku stūrītis — eRuRo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="assets/logo.svg" alt="eRuRo logo" height="48"></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="kapec.html">Kāpēc</a></li>
+        <li><a href="family-ui.html">Ģimenes UI</a></li>
+        <li><a href="parents_corner.html" class="active">Vecāku stūrītis</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
 <section class="parents-corner">
   <h2>Vecāku stūrītis</h2>
   <div class="audio-card lavender">
@@ -32,7 +52,7 @@
         </svg>
       </span>
     </div>
-    <div class="audio-microtext">Ieraksti īsu pateicību — “Paldies, ka parūpējies par bērnu”</div>
+    <div class="audio-microtext">Ieraksti īsu pateicību — "Paldies, ka parūpējies par bērnu"</div>
     <div class="audio-actions">
       <button>▶️ Ierakstīt</button>
       <button>⏸️ Apturēt</button>
@@ -69,12 +89,12 @@
     <div class="diary-wave">
       <svg width="160" height="38">
         <defs>
-          <linearGradient id="diaryGradient">
+          <lineargradient id="diary-gradient">
             <stop offset="0%" stop-color="#fa8a6b"/>
             <stop offset="100%" stop-color="#CDB4DB"/>
-          </linearGradient>
+          </lineargradient>
         </defs>
-        <path d="M10 30 Q30 10 50 30 Q70 50 90 30 Q110 10 130 30 Q150 50 160 30" stroke="url(#diaryGradient)" stroke-width="4" fill="none">
+        <path d="M10 30 Q30 10 50 30 Q70 50 90 30 Q110 10 130 30 Q150 50 160 30" stroke="url(#diary-gradient)" stroke-width="4" fill="none">
           <animate attributeName="d" values="M10 30 Q30 10 50 30 Q70 50 90 30 Q110 10 130 30 Q150 50 160 30;
                                             M10 20 Q30 30 50 10 Q70 40 90 20 Q110 30 130 10 Q150 40 160 20;
                                             M10 30 Q30 10 50 30 Q70 50 90 30 Q110 10 130 30 Q150 50 160 30"
@@ -97,13 +117,13 @@
     <h3>✨ Ikdienas rituāli</h3>
     <div class="rituals-list">
       <div class="ritual">
-        <span>“Ieteikums: <b>20 min bez ekrāniem sestdien</b>”</span>
+        <span>"Ieteikums: <b>20 min bez ekrāniem sestdien</b>"</span>
         <span class="ritual-stars">⭐</span>
         <button>Izmēģināt</button>
         <button>Pievienot kalendāram</button>
       </div>
       <div class="ritual">
-        <span>“Uzraksti partnerim, par ko esi pateicīgs.”</span>
+        <span>"Uzraksti partnerim, par ko esi pateicīgs."</span>
         <span class="ritual-stars">⭐</span>
         <button>Izmēģināt</button>
         <button>Pievienot kalendāram</button>
@@ -123,3 +143,6 @@
     <span class="micro-pin">PIN/biometrija logs</span>
   </div>
 </section>
+  </main>
+</body>
+</html>
