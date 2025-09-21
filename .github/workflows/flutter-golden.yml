@@ -63,7 +63,7 @@ jobs:
                 Visual regressions detected. Please:
                 1. Review UI changes
                 2. If changes are intentional, update golden images:
-                   `flutter test --update-goldens`
+                   flutter test --update-goldens
                 3. Commit updated golden images
 
                 Check the workflow run for details:
