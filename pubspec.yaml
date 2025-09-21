@@ -1,5 +1,7 @@
 name: family_copilot
-description: A Flutter project that demonstrates GitHub Copilot best practices with notification system, deep-link navigation, and personalized filtering.
+description: >
+  A Flutter project that demonstrates GitHub Copilot best practices with notification system,
+  deep-link navigation, personalized filtering, and golden test validation.
 
 version: 1.0.0+1
 
@@ -9,23 +11,54 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # 🔔 Notification stack
   flutter_local_notifications: 17.2.2
   firebase_messaging: 14.9.4
+
+  # 🧭 Routing and navigation
   go_router: 14.2.7
+
+  # 🧠 State management
   provider: 6.1.2
+
+  # 💾 Local storage
   shared_preferences: 2.3.2
+
+  # 🎨 Icons
   cupertino_icons: 1.0.6
 
+  # 🌐 Optional: Localization support
+  intl: ^0.18.1
+
+  # 🖼️ Optional: SVG support (if needed)
+  flutter_svg: ^2.0.9
+
 dev_dependencies:
+  # 🛠️ Code generation
   build_runner: 2.4.12
+
+  # ✅ Linting rules
   flutter_lints: 4.0.0
+
+  # 🧪 Unit testing
   mockito: 5.4.4
   flutter_test:
-    sdk: flutter 
-  
+    sdk: flutter
+
+  # 🚀 Integration testing
+  integration_test:
+    sdk: flutter
+
 flutter:
   uses-material-design: true
+
+  # 📁 Asset directories
   assets:
     - assets/images/
     - assets/icons/
     - assets/sounds/
+
+  # 🖼️ Golden test assets (optional)
+  # Ensure these are committed and validated via CI
+  # - test/golden/
