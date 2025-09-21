@@ -206,16 +206,41 @@ testWidgets('MyWidget golden test', (WidgetTester tester) async {
 });
 ```
 
-Golden testi tiek izpildīti CI vidē ar GitHub Actions (`flutter-golden.yml`).
+### Golden testu automatizācija:
 
-CI workflow satur `flutter test --update-goldens` komandu.
+**CI/CD workflow** (`flutter-golden.yml`) nodrošina:
+- Automātiska golden testu izpilde katram PR
+- Atkarību audits un atjaunošana pēc pieprasījuma
+- Automātiska golden failu reģenerācija ar workflow dispatch vai label
+- PR komentēšana ar testu rezultātiem
+- Automātiska golden failu kommitēšana
 
-Golden attēls jāģenerē lokāli ar:
+**Lokālā izstrāde:**
 ```bash
-flutter test --update-goldens
+# Ģenerēt golden failus ar uzlaboto skriptu
+./generate_goldens.sh
+
+# Auditēt atkarības
+./scripts/audit_dependencies.sh
+
+# Ģenerēt golden failus ar atkarību auditu
+./generate_goldens.sh --audit-deps
 ```
 
-Pievieno attēlu versiju kontrolei.
+**Workflow trigger opcijas:**
+1. **Manual dispatch**: Actions → Flutter Golden Tests → Run workflow
+   - ✅ Regenerate golden files
+   - ✅ Update dependencies
+2. **PR labels**: Pievieno `regenerate-goldens` vai `dependencies` label
+3. **Automatic**: Katram PR automātiski tiek palaisti testi
+
+### Golden testu labās prakses:
+
+- **Konsistents fonts**: Izmanto Flutter embedded fonts testiem
+- **Deterministic content**: Izvairieties no laika atkarīgiem datiem golden testos
+- **Platform consistency**: CI izmanto Ubuntu ar Flutter 3.22.0 konsistentiem rezultātiem
+- **Minimal test scope**: Testējiet konkrētus UI komponentus, nevis veselas aplikācijas
+- **Version constraints**: Izmanto caret notation (^1.0.0) atkarībām elastīgumam
 
 Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuālās kvalitātes validāciju projekta CI/CD.
 
