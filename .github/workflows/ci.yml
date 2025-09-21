@@ -114,7 +114,7 @@ jobs:
           path: coverage_report.txt
 
       - name: ❌ Fail if tests or coverage failed
-        if: steps.run_tests.outputs.TEST_EXIT_CODE != '0' || steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0'
+        if: steps.run_tests.outputs.TEST_EXIT_CODE != '0' ||  steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0' 
         run: |
           echo "❌ Tests or coverage check failed"
           exit 1
