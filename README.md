@@ -255,3 +255,25 @@ flutter test --update-goldens  # Generate golden images for first run
 flutter run
 ```
 
+## 👨‍💻 Izstrāde un Veicināšana / Development & Contributing
+
+### CI/CD Labākās Prakses / CI/CD Best Practices
+
+Pirms veikt izmaiņas CI/CD workflow failos, iepazīstieties ar drošajām git prakšu vadlīnijām:
+
+📖 **[CI/CD Git Practices Documentation](docs/CI_CD_GIT_PRACTICES.md)**
+
+Šis dokuments satur:
+- Drošas `git fetch` komandas CI vidē
+- Biežāko kļūdu novēršanu
+- Praktiskus piemērus no mūsu projekta
+
+Before making changes to CI/CD workflow files, familiarize yourself with safe git practices:
+
+📖 **[CI/CD Git Practices Documentation](docs/CI_CD_GIT_PRACTICES.md)**
+
+This document contains:
+- Safe `git fetch` commands for CI environment
+- Common error troubleshooting  
+- Practical examples from our project
+
