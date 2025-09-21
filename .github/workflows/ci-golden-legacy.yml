@@ -1,0 +1,69 @@
+name: CI Golden Tests (Legacy)
+
+# This workflow is being deprecated in favor of flutter-golden.yml
+# Keeping for backward compatibility during transition
+
+on:
+  workflow_dispatch:
+    inputs:
+      legacy_mode:
+        description: 'Run legacy golden test (deprecated)'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  golden-legacy:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.legacy_mode == 'true'
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'  # Updated to match FLUTTER_VERSION
+
+      - name: 📥 Install dependencies
+        run: flutter pub get
+
+      - name: 📁 Validate golden structure
+        run: bash scripts/validate_golden_structure.sh
+
+      - name: 🖼️ Run golden tests (all)
+        run: flutter test test/widget_test.dart --update-goldens
+
+      - name: 📤 Upload golden artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: legacy-golden-artifacts
+          path: goldens/
+
+  migration-notice:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.legacy_mode != 'true'
+    steps:
+      - name: 🚨 Migration Notice
+        run: |
+          echo "🚨 This workflow has been superseded by flutter-golden.yml"
+          echo "Please use the enhanced Flutter Golden Tests workflow instead."
+          echo "Visit Actions → Flutter Golden Tests for the new automation features."
+
+      - name: 📤 Upload dull artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dull
+          path: scripts/
+          if-no-files-found: warn
+          retention-days: 7
+          compression-level: 6
+          overwrite: true
+          include-hidden-files: false
