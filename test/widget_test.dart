@@ -52,7 +52,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(textWidget);
+      await tester.pumpWidget(const.textWidget);
       await tester.pumpAndSettle();
 
       // Compare the text widget appearance with golden file
@@ -98,7 +98,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(containerWidget);
+      await tester.pumpWidget(const.containerWidget);
       await tester.pumpAndSettle();
 
       // Compare the styled container with golden file
