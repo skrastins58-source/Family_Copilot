@@ -59,15 +59,15 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: |
-              🖼️ **Golden tests failed!**
+                🖼️ **Golden tests failed!**
 
-              Visual regressions detected. Please:
-              1. Review UI changes
-              2. If changes are intentional, update golden images:
-                 `flutter test --update-goldens`
-              3. Commit updated golden images
+                Visual regressions detected. Please:
+                1. Review UI changes
+                2. If changes are intentional, update golden images:
+                   `flutter test --update-goldens`
+                3. Commit updated golden images
 
-              Check the workflow run for details:
-              ${{ github.server_url }}/${{ github.repository }}/actions/runs/
-              ${{ github.run_id }}
+                Check the workflow run for details:
+                ${{ github.server_url }}/${{ github.repository }}/actions/runs/
+                ${{ github.run_id }}
             })
