@@ -89,11 +89,11 @@ jobs:
           echo "COVERAGE_EXIT_CODE=$?" >> $GITHUB_OUTPUT
 
       - name: 📦 Install Node.js dependencies for PR comments
-        if: github.event_name == 'pull_request'
+        if: github.event_name -- 'pull_request'
         run: npm install
 
       - name: 💬 Comment on PR if issues found
-        if: github.event_name == 'pull_request' && (steps.run_tests.outputs.TEST_EXIT_CODE != '0' || steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0')
+        if: github.event_name -- 'pull_request' && (steps.run_tests.outputs.TEST_EXIT_CODE != '0' || steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TESTS_FAILED: ${{ steps.run_tests.outputs.TEST_EXIT_CODE != '0' }}
