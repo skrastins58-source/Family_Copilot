@@ -89,7 +89,11 @@ Ja Copilot divreiz pārprasa un lietotājs (Janis) apstiprina ar “jā”, Copi
 
 ## 👥 Autori
 
-Family Copilot Team — demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
+**Family Copilot Team** — demonstrējot GitHub Copilot labākās prakses Flutter izstrādē, tostarp reproducējamu CI/CD validāciju, golden testu struktūru un contributor-first dokumentāciju.
 
+---
 
-Token for tests - GOLDEN . Use when i say.
+**Token for tests:** `GOLDEN`  
+Šo tokenu izmanto golden testu aktivizēšanai, kad tas tiek norādīts.  
+_Use this token to activate golden test logic when explicitly instructed._
+
