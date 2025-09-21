@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ main, develop ]
-  pull_request:
+pull_request:
     branches: [ main ]
 
 jobs:
@@ -106,9 +106,7 @@ jobs:
         name: coverage-report
         path: coverage/html/
 
-name: CI
-
-on:
+job: 
   push:
     branches:
       - main
@@ -124,8 +122,8 @@ on:
       - main
       - master
       - develop
-
-  pull_request_target:
+      
+pull_request_target:
     types:
       - opened
       - synchronize
@@ -135,7 +133,7 @@ on:
       - master
       - develop
 
-jobs:
+run:
   build:
     name: Build APK & Web
     runs-on: ubuntu-latest
@@ -161,7 +159,7 @@ jobs:
         run: flutter build web --release
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: |
@@ -208,34 +206,38 @@ jobs:
             tests/diff
 
   pr-summary:
-    name: Post PR Quality Summary
-    if: github.event_name == 'pull_request'
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+     -name: Post PR Quality Summary
+     if: ${{ github.event_name == 'pull_request' }}
+     needs: test
+     
+runs-on: ubuntu-latest
+steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Post PR summary
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: node post-pr-summary.js
+pull-request:
+build:
+   - name: Post PR summary
+     env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
 
+need: node post-pr-summary.js
 permissions:
   contents: read
   packages: write
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
-
+runs:
+     build: 
+     - name: ubuntu-latest
+       steps:
+       uses: actions/checkout@v4
+       
+input:
+     - name: "Log in to GitHub Container Registry"
+       uses: docker/login-action@v2
+       registry: ghcr.io
+       username: ${{ github.skrastins }}
+       password: ${{ secrets.GHCR_TOKEN }}
+  }
+.
