@@ -1,4 +1,4 @@
-name: CI - Build, Test & Validate
+name: "CI - Build, Test & Validate"
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    name: 🏗️ Build APK & Web
+    name: "🏗️ Build APK & Web"
     runs-on: ubuntu-latest
 
     steps:
@@ -66,12 +66,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🛠️ Set up Flutter
+      - name: "🛠️ Set up Flutter"
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.4'
 
-      - name: 📦 Get dependencies
+      - name: "📦 Get dependencies"
         run: flutter pub get
 
       - name: "🧪 LV: Palaiž testus / EN: Run tests"
@@ -92,7 +92,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: npm install
 
-      - name: 💬 Comment on PR if issues found
+      - name: "💬 Comment on PR if issues found"
         if: ${{ github.event_name == 'pull_request' }} && (steps.run_tests.outputs.TEST_EXIT_CODE != '0' || steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -120,11 +120,11 @@ jobs:
           exit 1
 
   validate-main:
-    name: 🔍 Validate Git Fetch Safety
+    name: "🔍 Validate Git Fetch Safety"
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 Checkout repository
+      - name: "🧾 Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
