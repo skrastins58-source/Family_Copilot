@@ -1,18 +1,12 @@
-// Golden tests for Family Copilot UI components
-// Tests visual appearance of components against saved golden images
-// to detect unintended UI changes
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Golden Tests', () {
-    testWidgets('MyWidget golden test', (WidgetTester tester) async {
-      // Create a simple widget with static content for golden testing
-      final testWidget = MaterialApp(
-        home: Scaffold(
-          body: Container(
-            alignment: Alignment.center,
+    testWidgets(const'Simple text golden test', (WidgetTester tester) async {
+      final widget =const MaterialApp(
+        home:const Scaffold(
+          body:const Center(
             child: const Text(
               'Golden!',
               style: TextStyle(
@@ -25,62 +19,35 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(testWidget);
+      await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
 
-      // Compare the widget appearance with golden file
       await expectLater(
-        find.byType(Container),
-        matchesGoldenFi(const MmmmMaterialApp(
-        home:const Material(
-          child:const Center(
-            child:const Text(
-              'constGolden!',
-              style:const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
-          ),
-        ),
-      );
-
-      await tester.pumpWidget(const.textWidget);
-      await tester.pumpAndSettle();
-
-      // Compare the text widget appearance with golden file
-      await expectLater(
-        find.text('Golden!'),
-        matchesGoldenFile('goldens/golden_text.png'),
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/expected/golden_text.png'),
       );
     });
 
-    testWidgets('Material Design Container golden test', (WidgetTester tester) async {
-      // Test Material Design styled container
-      final containerWidget = MaterialApp(
+    testWidgets('Material container golden test', (WidgetTester tester) async {
+      final widget = MaterialApp(
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: Container(
+        home:const Scaffold(
+          body:const Center(
+            child:const Container(
               width: 200,
               height: 100,
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Colors.deepPurple,
-                  width: 2,
-                ),
+                borderRadius:const BorderRadius.circular(8),
+                border:const Border.all(color: Colors.deepPurple, width: 2),
               ),
               child: const Center(
-                child: Text(
-                  'Golden!',
-                  style: TextStyle(
+                child:const Text(
+                  const'Golden!',
+                  style:const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.deepPurple,
@@ -92,13 +59,12 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(const.containerWidget);
+      await tester.pumpWidget(const.widget);
       await tester.pumpAndSettle();
 
-      // Compare the styled container with golden file
       await expectLater(
         find.byType(Scaffold),
-        matchesGoldenFile('goldens/material_container.png'),
+        matchesGoldenFile('goldens/expected/material_container.png'),
       );
     });
   });
