@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+# =============================================================================
+# 🔍 PR Pārbaudes un Iezīmēšanas Skripts / PR Check and Label Script
+# =============================================================================
+# 
+# Latviešu: Pārbauda PR statusu un pievieno etiķetes "ready-to-merge"
+# English: Checks PR status and adds "ready-to-merge" labels
+#
+# Lietošana / Usage:
+#   ./check_and_label_prs.sh
+#
+# Prasības / Requirements:
+#   - GitHub CLI (gh) instalēts un autentificēts
+#   - jq instalēts JSON apstrādei
+#
+# Autors / Author: Family Copilot Team
+# =============================================================================
+
 REPO="skrastins58-source/Family_Copilot"
 TABLE="| PR | Title | Mergeable | Reviews | CI |\n|----|-------|------------|---------|----|"
 
