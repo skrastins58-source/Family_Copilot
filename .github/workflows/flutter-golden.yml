@@ -6,11 +6,23 @@ on:
   push:
     branches: [ main, master, develop ]
   workflow_dispatch:
+    inputs:
+      regenerate_goldens:
+        description: 'Regenerate golden files'
+        required: false
+        default: 'false'
+        type: boolean
+      update_dependencies:
+        description: 'Update dependencies to latest compatible versions'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
-  golden-tests:
-    name: Golden Tests
+  dependency-audit:
+    name: Dependency Audit
     runs-on: ubuntu-latest
+    if: github.event.inputs.update_dependencies == 'true' || contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,7 +30,35 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.3'
+          flutter-version: '3.22.0'
+
+      - name: Audit dependencies
+        run: |
+          echo "📋 Current dependencies:"
+          flutter pub deps --style=compact
+          echo ""
+          echo "🔍 Checking for outdated packages:"
+          flutter pub outdated --no-dev-dependencies || true
+          echo ""
+          echo "🧪 Dry run dependency upgrade:"
+          flutter pub upgrade --dry-run
+
+  golden-tests:
+    name: Golden Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'
 
       - name: Get dependencies
         run: flutter pub get
@@ -32,16 +72,135 @@ jobs:
       - name: Check formatting
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Run unit tests
+      - name: Update dependencies if requested
+        if: github.event.inputs.update_dependencies == 'true'
+        run: |
+          echo "🔄 Updating dependencies to latest compatible versions..."
+          flutter pub upgrade --major-versions
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          if ! git diff --quiet pubspec.lock; then
+            git add pubspec.lock
+            git commit -m "chore: update dependencies via workflow"
+            git push
+          fi
+
+      - name: Run unit tests (no golden update)
+        if: github.event.inputs.regenerate_goldens != 'true' && !contains(github.event.pull_request.labels.*.name, 'regenerate-goldens')
         run: flutter test
+
+      - name: Generate golden files if requested
+        if: github.event.inputs.regenerate_goldens == 'true' || contains(github.event.pull_request.labels.*.name, 'regenerate-goldens')
+        run: |
+          echo "🎨 Regenerating golden test images..."
+          flutter test --update-goldens
+          
+          # Check if golden files were updated
+          if [ -n "$(git status --porcelain goldens/)" ]; then
+            echo "golden_files_updated=true" >> $GITHUB_ENV
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add goldens/
+            git commit -m "test: regenerate golden files via workflow"
+            git push
+          else
+            echo "golden_files_updated=false" >> $GITHUB_ENV
+          fi
+
+      - name: Run unit tests (with golden validation)
+        if: github.event.inputs.regenerate_goldens != 'true' && !contains(github.event.pull_request.labels.*.name, 'regenerate-goldens')
+        run: flutter test test/widget_test.dart
 
       - name: Validate golden test structure
         run: bash scripts/validate_golden_structure.sh --strict
 
+      - name: Check for golden file differences
+        id: golden_diff
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ -n "$(git status --porcelain goldens/)" ]; then
+            echo "has_diff=true" >> $GITHUB_OUTPUT
+            echo "🔍 Golden file differences detected"
+          else
+            echo "has_diff=false" >> $GITHUB_OUTPUT
+            echo "✅ No golden file differences"
+          fi
+
+      - name: Comment on PR with golden test status
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const hasDiff = '${{ steps.golden_diff.outputs.has_diff }}' === 'true';
+            const goldenUpdated = '${{ env.golden_files_updated }}' === 'true';
+            
+            let comment = '## 🖼️ Golden Test Results\n\n';
+            
+            if (goldenUpdated) {
+              comment += '✅ **Golden files have been automatically regenerated and committed.**\n\n';
+            } else if (hasDiff) {
+              comment += '⚠️ **Golden file differences detected!**\n\n';
+              comment += 'This PR contains changes that affect UI rendering. If these changes are intentional:\n';
+              comment += '1. Add the `regenerate-goldens` label to this PR, or\n';
+              comment += '2. Run the workflow manually with "Regenerate golden files" option\n';
+              comment += '3. Or run locally: `flutter test --update-goldens`\n\n';
+            } else {
+              comment += '✅ **All golden tests passed!**\n\n';
+              comment += 'No visual regressions detected.\n\n';
+            }
+            
+            comment += '### 📊 Test Summary\n';
+            comment += '- **Flutter Version**: 3.22.0\n';
+            comment += '- **Platform**: Ubuntu Latest\n';
+            comment += '- **Golden Tests**: Validated\n';
+            comment += '- **Code Analysis**: Passed\n';
+            comment += '- **Formatting**: Checked\n\n';
+            comment += '_Automated by Golden Test workflow_';
+            
+            // Try to find existing comment to update
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const existingComment = comments.data.find(comment => 
+              comment.body.includes('🖼️ Golden Test Results')
+            );
+            
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
+
       - name: Upload golden artifacts
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: golden-artifacts
           path: |
-            goldens
-            diff
+            goldens/
+            test/
+          retention-days: 30
+
+      - name: Upload test failure artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-failure-artifacts
+          path: |
+            goldens/
+            diff/
+            test/
+          retention-days: 7

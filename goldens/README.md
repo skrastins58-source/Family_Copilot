@@ -12,13 +12,22 @@ This directory contains golden images for widget tests. These images are used as
 
 ### Automatic Script (Recommended):
 ```bash
+# Enhanced script with validation and dependency audit
 ./generate_goldens.sh
+
+# With dependency audit
+./generate_goldens.sh --audit-deps
 ```
 
 ### Manual Generation:
 ```bash
 flutter test test/widget_test.dart --update-goldens
 ```
+
+### Automated CI Generation:
+- **Workflow Dispatch**: Actions → Flutter Golden Tests → "Regenerate golden files"
+- **PR Labels**: Add `regenerate-goldens` label to any PR
+- **Dependency Updates**: Add `dependencies` label for automated dependency audit
 
 This will create/update the PNG files in this directory with the current appearance of the tested widgets.
 

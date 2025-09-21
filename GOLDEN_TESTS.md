@@ -44,8 +44,14 @@ This PR implements a complete golden test infrastructure for the Family Copilot 
 
 ### Local Development:
 ```bash
-# Generate golden images
+# Generate golden images with enhanced script
 ./generate_goldens.sh
+
+# Generate with dependency audit
+./generate_goldens.sh --audit-deps
+
+# Audit dependencies separately
+./scripts/audit_dependencies.sh
 
 # Or manually:
 flutter test test/widget_test.dart --update-goldens
@@ -54,17 +60,38 @@ flutter test test/widget_test.dart --update-goldens
 flutter test test/widget_test.dart
 ```
 
-### CI/CD:
+### CI/CD Automation:
+
+#### Automatic Triggers:
 - Golden tests run automatically on PR creation/updates
-- Failed tests provide artifacts and PR comments
-- Validates both new and existing golden images
+- Dependency audit runs when `dependencies` label is added to PR
+- Failed tests provide artifacts and PR comments with actionable feedback
+
+#### Manual Workflow Dispatch:
+1. Go to Actions → Flutter Golden Tests
+2. Click "Run workflow"
+3. Choose options:
+   - ✅ **Regenerate golden files**: Updates golden images and commits them
+   - ✅ **Update dependencies**: Upgrades to latest compatible versions
+
+#### PR Label Triggers:
+- Add `regenerate-goldens` label: Automatically regenerates golden files
+- Add `dependencies` label: Runs dependency audit and upgrade
+
+#### Automated Features:
+- **Dependency Management**: Automatic auditing and upgrading with workflow dispatch
+- **Golden Regeneration**: Automated update and commit of golden files
+- **PR Commenting**: Intelligent status updates with actionable recommendations
+- **Version Consistency**: Enforces Flutter 3.22.0 across all environments
+- **Artifact Retention**: Saves test results and golden files for debugging
 
 ## Benefits:
 
 1. **Visual Regression Prevention**: Automatically detects unintended UI changes
 2. **Reproducible Quality**: Consistent Flutter version ensures reliable results
-3. **Developer Friendly**: Clear documentation and helper scripts
-4. **CI Integration**: Automated validation in pull requests
-5. **Best Practices**: Follows Flutter golden test recommendations
+3. **Developer Friendly**: Enhanced scripts with validation and guidance
+4. **Advanced CI Integration**: Automated PR feedback and golden file management
+5. **Dependency Management**: Automated auditing and safe upgrading
+6. **Best Practices**: Follows Flutter golden test recommendations with enterprise-grade automation
 
-This implementation provides a solid foundation for maintaining visual consistency in the Family Copilot application.
+This enhanced implementation provides enterprise-level golden test automation with intelligent dependency management for the Family Copilot application.

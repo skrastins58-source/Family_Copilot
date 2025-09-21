@@ -1,26 +1,25 @@
-name: CI Golden Tests
+name: CI Golden Tests (Legacy)
+
+# This workflow is being deprecated in favor of flutter-golden.yml
+# Keeping for backward compatibility during transition
 
 on:
-  pull_request:
-    branches: [ main, master, develop ]
-    paths:
-      - "lib/**"
-      - "test/golden/**"
-      - "goldens/**"
-      - "scripts/**"
-      - ".github/workflows/ci-golden.yml"
-      - "pubspec.yaml"
-  push:
-    branches: [ main, master, develop ]
   workflow_dispatch:
+    inputs:
+      legacy_mode:
+        description: 'Run legacy golden test (deprecated)'
+        required: false
+        default: 'false'
+        type: boolean
 
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
-  golden:
+  golden-legacy:
     runs-on: ubuntu-latest
+    if: github.event.inputs.legacy_mode == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,13 +29,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.4'
-
-      - name: Fetch default branch safely
-        run: |
-          echo "Fetching default branch: ${{ github.event.repository.default_branch }}"
-          git fetch --no-tags --prune --depth=1 origin \
-            ${{ github.event.repository.default_branch }}:refs/remotes/origin/${{ github.event.repository.default_branch }}
+          flutter-version: '3.22.0'  # Updated to match FLUTTER_VERSION
 
       - name: Install dependencies
         run: flutter pub get
@@ -44,37 +37,22 @@ jobs:
       - name: Validate golden structure
         run: bash scripts/validate_golden_structure.sh
 
-      - name: Run golden test
-        run: flutter test --update-goldens test/golden/golden_notification_preview.dart
-
-      - name: Check golden diff
-        run: bash scripts/check_golden_diff.sh ${{ github.event.repository.default_branch }}
+      - name: Run golden tests (all)
+        run: flutter test test/widget_test.dart --update-goldens
 
       - name: Upload golden artifact
-        id: upload-artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: notification_preview
-          path: goldens/notification_preview.png
+          name: legacy-golden-artifacts
+          path: goldens/
 
-      - name: Determine NOTIF_IMAGE_STATUS
+  migration-notice:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.legacy_mode != 'true'
+    steps:
+      - name: Migration Notice
         run: |
-          if [ -f goldens/notification_preview.png ]; then
-            echo "NOTIF_IMAGE_STATUS=success" >> $GITHUB_ENV
-          else
-            echo "NOTIF_IMAGE_STATUS=fail" >> $GITHUB_ENV
-          fi
-
-      - name: Generate PR comment
-        if: github.event_name == 'pull_request'
-        run: node scripts/post-pr-summary.js
-        env:
-          GOLDEN_ARTIFACT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          NOTIF_IMAGE_STATUS: ${{ env.NOTIF_IMAGE_STATUS }}
-          CI_COVERAGE_SUMMARY: ${{ steps.coverage.outputs.summary || '' }}
-
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
-        run: gh pr comment ${{ github.event.pull_request.number }} --body-file pr-comment.md
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "🚨 This workflow has been superseded by flutter-golden.yml"
+          echo "Please use the enhanced Flutter Golden Tests workflow instead."
+          echo "Visit Actions → Flutter Golden Tests for the new automation features."
