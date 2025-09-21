@@ -1,8 +1,8 @@
 
 name: family_copilot
-   description: A Flutter project that demonstrates GitHub Copilot best practices with notification system, deep-link navigation, and personalized filtering.
+  description: A Flutter project that demonstrates GitHub Copilot best practices with notification system, deep-link navigation, and personalized filtering.
   version: 1.0.0+1
-environment:
+  environment:
     sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
@@ -22,7 +22,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter 
   
-flutter:
+  flutter:
   uses-material-design: true
   assets:
     - assets/images/
