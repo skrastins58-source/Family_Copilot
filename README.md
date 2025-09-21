@@ -1,10 +1,6 @@
-
-
 # 🧭 Family Copilot
 
 **Family Copilot** ir Flutter balstīts projekts, kas demonstrē GitHub Copilot labākās prakses un uzlabo ziņu sistēmu ar personalizētu filtrēšanu, vizuāliem paziņojumiem, deep-link navigāciju un CI/CD automatizāciju. Lietotāji saņem tikai sev aktuālas ziņas, bet izstrādātāji iegūst efektīvu darba plūsmu ar Firebase Functions, golden testiem un coverage enforcement.
-
----
 
 ## 🛠️ Instalācija un Palaide
 
@@ -169,4 +165,3 @@ lib/
 
 Family Copilot Team — demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
 ```
-
