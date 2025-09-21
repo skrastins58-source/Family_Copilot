@@ -99,6 +99,14 @@ flutter/
 coverage/
 test/failures/
 
+# Coverage reports
+lcov.info
+coverage_report.txt
+
+# Node.js dependencies for CI scripts
+node_modules/
+package-lock.json
+
 # Golden tests - commit golden images but not failure directories
 # goldens/*.png should be committed
 test/**/failures/

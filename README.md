@@ -234,6 +234,32 @@ Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuāl�
 - **Platform consistency**: CI izmanto Ubuntu ar Flutter 3.22.0 konsistentiem rezultātiem
 - **Minimal test scope**: Testējiet konkrētus UI komponentus, nevis veselas aplikācijas
 
+## 🚨 Automatizēta kļūdu ziņošana
+
+Projekts iekļauj automātisko kļūdu ziņošanas sistēmu, kas komentē PR gadījumos, kad:
+
+### Kļūdu veidi:
+- **Golden testi neiziet**: UI komponenti neatbilst sagaidāmajiem golden attēliem
+- **Coverage zem sliekšņa**: Koda pārklājums ir mazāks par noteikto minimumu
+- **Unit testi neiziet**: Funkcionālie testi neizdodas
+
+### Sistēmas darbība:
+1. **CI pārbaudes**: Katrs PR tiek automātiski pārbaudīts
+2. **Kļūdu detektēšana**: Sistema identificē problēmas testos vai coverage
+3. **Automātiski komentāri**: PR saņem komentāru ar detalizētu problēmu aprakstu
+4. **Ieteikumi**: Katram kļūdas tipam tiek sniegti konkrēti risinājuma soļi
+
+### Konfigurācija:
+- Coverage sliekšņi definēti `coverage-summary.json`
+- PR komentāru funkcionalitāte `scripts/pr-comment.js`
+- CI integrācija `.github/workflows/ci.yml` un `flutter-golden.yml`
+
+### Coverage sliekšņi:
+- **Lines**: 85%
+- **Functions**: 90%
+- **Branches**: 80%
+- **Statements**: 85%
+
 ## Autori
 
 Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.

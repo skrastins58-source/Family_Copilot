@@ -1,4 +1,4 @@
-name: CI - Build, Test & Validate
+name: "CI - Build, Test & Validate"
 
 on:
   pull_request:
@@ -14,40 +14,40 @@ permissions:
 
 jobs:
   build:
-    name: 🏗️ Build APK & Web
+    name: "🏗️ Build APK & Web"
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 LV: Izvelk repozitoriju / EN: Checkout repository
+      - name: "🧾 LV: Izvelk repozitoriju / EN: Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Pilna vēsture versijām/tagiem
 
-      - name: 🐳 LV: Pieslēdzas GHCR / EN: Log in to GitHub Container Registry
+      - name: "🐳 LV: Pieslēdzas GHCR / EN: Log in to GitHub Container Registry"
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: 🛠️ LV: Uzstāda Flutter / EN: Set up Flutter
+      - name: "🛠️ LV: Uzstāda Flutter / EN: Set up Flutter"
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.4'
 
-      - name: 🌐 LV: Aktivizē web atbalstu / EN: Enable web support
+      - name: "🌐 LV: Aktivizē web atbalstu / EN: Enable web support"
         run: flutter config --enable-web
 
-      - name: 📦 LV: Ielādē atkarības / EN: Get dependencies
+      - name: "📦 LV: Ielādē atkarības / EN: Get dependencies"
         run: flutter pub get
 
-      - name: 📱 LV: Būvē Android APK / EN: Build Android APK
+      - name: "📱 LV: Būvē Android APK / EN: Build Android APK"
         run: flutter build apk --debug
 
-      - name: 🌍 LV: Būvē Web bundle / EN: Build Web bundle
+      - name: "🌍 LV: Būvē Web bundle / EN: Build Web bundle"
         run: flutter build web --release
 
-      - name: 📤 LV: Augšupielādē artefaktus / EN: Upload build artifacts
+      - name: "📤 LV: Augšupielādē artefaktus / EN: Upload build artifacts"
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
@@ -66,34 +66,70 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🛠️ Set up Flutter
+      - name: "🛠️ Set up Flutter"
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.4'
 
-      - name: 📦 Get dependencies
+      - name: "📦 Get dependencies"
         run: flutter pub get
 
-      - name: 🧪 LV: Palaiž testus / EN: Run tests
-        run: flutter test --coverage
+      - name: "🧪 LV: Palaiž testus / EN: Run tests"
+        id: run_tests
+        continue-on-error: true
+        run: |
+          flutter test --coverage
+          echo "TEST_EXIT_CODE=$?" >> $GITHUB_OUTPUT
 
-      - name: 📊 LV: Augšupielādē pārklājuma datus / EN: Upload coverage report
+      - name: "📊 LV: Pārbauda coverage / EN: Check coverage"
+        id: check_coverage
+        continue-on-error: true
+        run: |
+          bash ./scripts/check_coverage.sh
+          echo "COVERAGE_EXIT_CODE=$?" >> $GITHUB_OUTPUT
+
+      - name: 📦 Install Node.js dependencies for PR comments
+        if: ${{ github.event_name == 'pull_request' }}
+        run: npm install
+
+      - name: "💬 Comment on PR if issues found"
+        if: ${{ github.event_name == 'pull_request' }} && (steps.run_tests.outputs.TEST_EXIT_CODE != '0' || steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TESTS_FAILED: ${{ steps.run_tests.outputs.TEST_EXIT_CODE != '0' }}
+          COVERAGE_FAILED: ${{ steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0' }}
+        run: node scripts/pr-comment.js
+
+      - name: "📊 LV: Augšupielādē pārklājuma datus / EN: Upload coverage report"
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
 
+      - name: 📄 Upload coverage report text
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-text
+          path: coverage_report.txt
+
+      - name: ❌ Fail if tests or coverage failed
+        if: steps.run_tests.outputs.TEST_EXIT_CODE != '0' ||  steps.check_coverage.outputs.COVERAGE_EXIT_CODE != '0' 
+        run: |
+          echo "❌ Tests or coverage check failed"
+          exit 1
+
   validate-main:
-    name: 🔍 Validate Git Fetch Safety
+    name: "🔍 Validate Git Fetch Safety"
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 Checkout repository
+      - name: "🧾 Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: ✅ LV: Drošs git fetch / EN: Safe git fetch
+      - name: "✅ LV: Drošs git fetch / EN: Safe git fetch"
         run: |
           git fetch origin main  # ✅ Neatjauno lokālo zaru
           echo "Safe fetch completed ✅"

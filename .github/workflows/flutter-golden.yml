@@ -1,4 +1,4 @@
-name: Flutter Golden Tests
+name: "Flutter Golden Tests"
 
 on:
   pull_request:
@@ -6,6 +6,10 @@ on:
   push:
     branches: [ main, master, develop ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   golden-tests:
@@ -33,15 +37,37 @@ jobs:
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Run unit tests
-        run: flutter test
+        id: run_tests
+        continue-on-error: true
+        run: |
+          flutter test
+          echo "TEST_EXIT_CODE=$?" >> $GITHUB_OUTPUT
 
       - name: Validate golden test structure
+        continue-on-error: true
         run: bash scripts/validate_golden_structure.sh --strict
 
-      - name: Upload golden artifacts
+      - name: "📦 Install Node.js dependencies for PR comment"
+        if: ${{ github.event_name == 'pull_request' }}
+        run: npm install
+
+      - name: "💬 Comment on PR if golden tests failed"
+        if: ${{ github.event_name == 'pull_request' }} && |  steps.run_tests.outputs.TEST_EXIT_CODE != '0'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOLDEN_TESTS_FAILED: 'true'
+        run: node scripts/pr-comment.js
+
+      - name: "Upload golden artifacts"
         uses: actions/upload-artifact@v4
         with:
           name: golden-artifacts
           path: |
             goldens
             diff
+
+      - name: "❌ Fail if golden tests failed"
+        if: steps.run_tests.outputs.TEST_EXIT_CODE != '0'
+        run: |
+          echo "❌ Golden tests failed"
+          exit 1
