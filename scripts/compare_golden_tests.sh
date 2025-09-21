@@ -89,7 +89,9 @@ generate_comparison_images() {
     
     # First, generate current images
     echo "📸 Generating current test images..."
-    flutter test test/widget_test.dart --update-goldens 2>/dev/null || true
+    if ! flutter test test/widget_test.dart --update-goldens 2>test_update_goldens_error.log; then
+        echo "⚠️  Warning: 'flutter test --update-goldens' failed. See test_update_goldens_error.log for details."
+    fi
     
     # Copy golden images to expected directory for comparison
     if [ -d "$GOLDENS_DIR" ]; then
