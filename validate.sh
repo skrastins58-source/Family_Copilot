@@ -1,4 +1,23 @@
 #!/usr/bin/env bash
+# ============================================================
+# 🧪 Family Copilot: Golden testu un CI validācijas skripts
+#
+# LV: Šis skripts pārbauda golden testu struktūru, pārklājumu
+#     un CI statusu. Palaidiet to pirms PR izveides.
+#
+# EN: This script validates golden test structure, coverage,
+#     and CI status. Run it before submitting a PR.
+#
+# ✅ Pārbaudes:
+#   - Tikai .png faili goldens/ direktorijā
+#   - Katram expected/*.png ir diff/*.png
+#   - Coverage ≥ 80% (check_coverage.sh)
+#   - Badge preview (README)
+#
+# 🔧 Palaišana:
+#   bash ./validate.sh
+# ============================================================
+
 set -e
 
 echo "🔍 Family Copilot Validation Script"
