@@ -79,6 +79,8 @@ validate_golden_images() {
         local file_path="$GOLDENS_DIR/$expected_file"
         if [ -f "$file_path" ]; then
             # Check file size
+            # Cross-platform: 'stat -c%s' works on Linux, 'stat -f%z' works on macOS/BSD.
+            # This fallback ensures compatibility for both systems.
             local file_size=$(stat -c%s "$file_path" 2>/dev/null || stat -f%z "$file_path" 2>/dev/null || echo "0")
             if [ "$file_size" -gt 0 ]; then
                 log_success "Golden image valid: $expected_file (${file_size} bytes)"
