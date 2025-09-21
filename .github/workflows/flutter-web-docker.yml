@@ -1,0 +1,64 @@
+name: Flutter Web Docker Build
+
+on:
+  pull_request:
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - web/**
+      - pubspec.yaml
+      - pubspec.lock
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: 💾 Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
+      - name: 🔍 LV: Pārbauda .dockerignore / EN: Validate .dockerignore presence
+        run: |
+          test -f .dockerignore && echo ".dockerignore found ✅" || exit 1
+
+      - name: 🏗️ LV: Veido Docker attēlu / EN: Build Docker image
+        run: |
+          docker build \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache-new \
+            -t flutter-web-app .
+
+      - name: ✅ LV: Pārbauda index.html / EN: Sanity check build output
+        run: |
+          docker run --rm flutter-web-app test -f /usr/share/nginx/html/index.html
+
+      - name: 🏷️ LV: Pievieno SHA tagu / EN: Tag image with commit SHA
+        run: |
+          docker tag flutter-web-app ghcr.io/skrastins58-source/flutter-web-app:${{ github.sha }}
+
+      - name: 🚀 LV: Publicē uz GHCR / EN: Push image to GHCR
+        if: success()
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GHCR_TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker push ghcr.io/skrastins58-source/flutter-web-app:${{ github.sha }}
+
+      - name: 📦 LV: Augšupielādē artefaktu / EN: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-web-app-html
+          path: /usr/share/nginx/html

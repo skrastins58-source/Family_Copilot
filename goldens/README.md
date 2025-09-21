@@ -57,3 +57,14 @@ flutter test test/widget_test.dart
 4. **Commit**: Add golden images to version control
 5. **CI Validation**: GitHub Actions validates on PR
 coment added
+### 🧪 `golden_accessibility_test.dart`
+
+Tests the visual rendering of accessibility markup using Flutter’s `Semantics` widget.
+
+- ✅ Validates screen reader labels and hints
+- ✅ Ensures layout consistency with accessibility overlays
+- ✅ Matches against `accessibility_screen_reader.png` golden snapshot
+
+Lai palaistu testu / To run the test:
+```bash
+flutter test test/golden/golden_accessibility_test.dart
