@@ -65,6 +65,14 @@ Copilot nedrīkst ieteikt ārējas API integrācijas vai atkarības, ja tās nav
 - UI komponentiem izmanto `Material Design 3`
 - Ievēro clean architecture principus: Presentation → Logic → Data
 
+- ### ✅ Validācija
+
+Lai pārbaudītu testu pārklājumu, golden struktūru un CI statusu, palaidiet:
+
+```bash
+./validate.sh
+
+
 ---
 
 ## 🧭 Konteksts
