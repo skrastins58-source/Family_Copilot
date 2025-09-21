@@ -6,7 +6,7 @@ on:
   push:
     branches: [ main, master, develop ]
   workflow_dispatch:
-
+  
 jobs:
   golden-tests:
     name: Golden Tests
@@ -94,13 +94,13 @@ jobs:
               repo: context.repo.repo,
               body: comment
             });
-            
-  golden-validation:
-    name: Golden Structure Validation
-         runs-on:ubuntu-latest
-    if: github.event_name -- 'pull_request'
+        
+     golden-validation:
+name: Golden Structure Validation 
+runs-on: ubuntu-latest
+  if: github.event_name -- 'pull_request'
     
-     steps:
+  steps:
       - name: Checkout code
         uses: actions/checkout@v4
         
