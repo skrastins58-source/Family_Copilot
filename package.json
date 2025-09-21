@@ -1,7 +1,38 @@
+<<<<<<< HEAD
 
 {
   "scripts": {
     "dev": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
+=======
+{
+  "name": "eruro-site",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "optimize:svg": "svgo -f Docs/assets/svg -q --config=svgo.config.js",
+    "optimize:img": "node scripts/optimize-images.js",
+    "build": "npm run optimize:svg && npm run optimize:img"
+  },
+  "dependencies": {
+    "nodemailer": "^7.0.6"
+  },
+  "devDependencies": {
+    "glob": "^7.2.0",
+    "sharp": "^0.32.0",
+    "svgo": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skrastins58-source/Family_Copilot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/skrastins58-source/Family_Copilot/issues"
+  },
+  "homepage": "https://github.com/skrastins58-source/Family_Copilot#readme",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+>>>>>>> 40cf7cb (WIP: Save local changes before rebase)
 }
