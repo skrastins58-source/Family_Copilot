@@ -1,0 +1,40 @@
+name: Flutter Web Docker Build
+
+on:
+  pull_request:
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - web/**
+      - pubspec.yaml
+      - pubspec.lock
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: 🔍 Validate .dockerignore presence
+        run: |
+          test -f .dockerignore && echo ".dockerignore found ✅" || exit 1
+
+      - name: 🏗️ Build Docker image
+        run: |
+          docker build -t flutter-web-app .
+
+      - name: ✅ Sanity check build output
+        run: |
+          docker run --rm flutter-web-app test -f /usr/share/nginx/html/index.html
+
+      - name: 📦 Optional: Save image as artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-web-app-image
+          path: /usr/share/nginx/html
