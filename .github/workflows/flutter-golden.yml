@@ -1,0 +1,56 @@
+name: Flutter Golden Tests
+
+on:
+  pull_request:
+    branches: [ main, master, develop ]
+  push:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  golden-tests:
+    name: Golden Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.3'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Verify dependencies
+        run: flutter pub deps
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Run unit tests
+        run: flutter test
+
+      - name: Validate golden test structure
+        run: bash scripts/validate_golden_structure.sh --strict
+
+      - name: Upload golden artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-artifacts@4
+          path: |
+             goldens/expected/
+             goldens/actual/
+             goldens/diff/
+
+if: failure()
+  runs-on:
+      call-ui-tests:
+         uses: skrastins58-source/Family_Copilot/.github/workflows/ui-test.yml@main
+         with:
+             coverage-threshold: 80 
+             secret: GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}

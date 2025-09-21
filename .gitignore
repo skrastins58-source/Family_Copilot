@@ -95,7 +95,16 @@ google-services.json
 flutter.tar.xz
 flutter/
 
+
 # LHCI and automation temp files
 lhci_report.json
 pr_comment.md
 previous_bundle_size.txt
+
+# Test related
+coverage/
+test/failures/
+
+# Golden tests - commit golden images but not failure directories
+# goldens/*.png should be committed
+test/**/failures/
