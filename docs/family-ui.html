@@ -2,49 +2,60 @@
 <html lang="lv">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ģimenes UI demonstrācija - interaktīva saskarne ģimenes saziņai ar avatāriem, mērķiem un paziņojumiem.">
+  <meta name="keywords" content="ģimenes UI, saskarne, avatāri, mērķi, paziņojumi">
+  <meta name="author" content="Family Copilot Team">
+  <meta name="robots" content="index, follow">
+  
   <title>Ģimenes UI — eRuRo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
+  <!-- Skip navigation link for accessibility -->
+  <a href="#main-content" class="skip-link">Iet uz galveno saturu</a>
+  
+  <header role="banner">
     <div class="logo"><img src="assets/logo.svg" alt="eRuRo logo" height="48"></div>
-    <nav>
+    <nav role="navigation" aria-label="Galvenā navigācija">
       <ul>
         <li><a href="index.html">Sākums</a></li>
         <li><a href="kapec.html">Kāpēc</a></li>
-        <li><a href="family-ui.html" class="active">Ģimenes UI</a></li>
+        <li><a href="family-ui.html" class="active" aria-current="page">Ģimenes UI</a></li>
         <li><a href="parents_corner.html">Vecāku stūrītis</a></li>
       </ul>
     </nav>
   </header>
-  <main>
-    <section class="family-ui">
-      <h2>👨‍👩‍👧‍👦 Mūsu ģimenes saskarne</h2>
-      <div class="avatars">
-        <div class="avatar" onclick="showMessage('Šodien tu biji drosmīgs!')">
+  <main id="main-content" role="main">
+    <section class="family-ui" aria-labelledby="family-ui-heading">
+      <h2 id="family-ui-heading">👨‍👩‍👧‍👦 Mūsu ģimenes saskarne</h2>
+      <div class="avatars" role="group" aria-label="Ģimenes locekļi">
+        <div class="avatar" onclick="showMessage('Šodien tu biji drosmīgs!')" tabindex="0" role="button" aria-label="Līvas avatars" onkeydown="if(event.key==='Enter'||event.key===' ')showMessage('Šodien tu biji drosmīgs!')">
           <img src="assets/animated-avatar.svg" alt="Bērna avatars" height="64"/>
           <span>Līva</span>
         </div>
-        <div class="avatar" onclick="showMessage('Mamma tevi mīl')">
+        <div class="avatar" onclick="showMessage('Mamma tevi mīl')" tabindex="0" role="button" aria-label="Mammas avatars" onkeydown="if(event.key==='Enter'||event.key===' ')showMessage('Mamma tevi mīl')">
           <img src="assets/animated-avatar.svg" alt="Mammas avatars" height="64"/>
           <span>Mamma</span>
         </div>
       </div>
-      <div id="avatar-msg" class="avatar-message"></div>
+      <div id="avatar-msg" class="avatar-message" aria-live="polite" aria-atomic="true"></div>
       <div class="family-goal">
         <h3>Mūsu nedēļas izaicinājums</h3>
         <div class="goal-progress">
           <span>3 kopīgas vakariņas</span>
-          <progress value="2" max="3"></progress>
+          <progress value="2" max="3" aria-label="Progress: 2 no 3 kopīgām vakariņām"></progress>
         </div>
       </div>
       <div class="family-notification">
         <img src="assets/animated-message.svg" alt="Sirsnīgs paziņojums" height="28"/>
         <span>Pateicies brālim par palīdzību!</span>
       </div>
-      <div class="emotion-menu">
+      <div class="emotion-menu" role="group" aria-label="Noskaņojuma izvēle">
         <h4>Kā tu jūties?</h4>
-        <span>☀️</span> <span>🌧️</span> <span>🤍</span>
+        <span role="button" tabindex="0" aria-label="Saulains">☀️</span> 
+        <span role="button" tabindex="0" aria-label="Lietains">🌧️</span> 
+        <span role="button" tabindex="0" aria-label="Mierīgs">🤍</span>
       </div>
       <div class="family-calendar">
         <h4>Virtuālais kalendārs</h4>
