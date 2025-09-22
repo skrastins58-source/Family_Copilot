@@ -65,6 +65,14 @@ Copilot nedrīkst ieteikt ārējas API integrācijas vai atkarības, ja tās nav
 - UI komponentiem izmanto `Material Design 3`
 - Ievēro clean architecture principus: Presentation → Logic → Data
 
+- ### ✅ Validācija
+
+Lai pārbaudītu testu pārklājumu, golden struktūru un CI statusu, palaidiet:
+
+```bash
+./validate.sh
+
+
 ---
 
 ## 🧭 Konteksts
@@ -77,7 +85,23 @@ Copilot nedrīkst ieteikt ārējas API integrācijas vai atkarības, ja tās nav
 
 Ja Copilot divreiz pārprasa un lietotājs (Janis) apstiprina ar “jā”, Copilot drīkst pārkāpt kādu no iepriekš minētajiem ierobežojumiem konkrētajā kontekstā. Šis izņēmums attiecas tikai uz interaktīvu sesiju ar Janis, un tas nedrīkst tikt izmantots automātiski vai bez skaidras apstiprināšanas.
 
----
+---## 🔐 CI/CD Tokeni
+
+Šie tokeni tiek izmantoti Family Copilot CI/CD plūsmās, golden testu validācijā un GitHub Container Registry (GHCR) autentifikācijā.
+
+| Token                | Apraksts                                                                 | Pēdējā lietošana       |
+|----------------------|--------------------------------------------------------------------------|------------------------|
+| `DOCKER`             | Docker build/push autentifikācija un workflow konfigurācija              | last week              |
+| `GHCR_SKRASTINS58SOURCE` | GHCR repozitorija identifikators skrastins58-source organizācijā     | 7 hours ago            |
+| `GHCR_TOKEN`         | Autentifikācijas token GHCR push operācijām                              | 3 days ago             |
+| `GH_PAT`             | GitHub Personal Access Token CI komentāriem un repo piekļuvei            | 4 days ago             |
+| `GOLDEN`             | Golden testu aktivizēšanas token — izmanto, kad tiek norādīts            | 1 hour ago             |
+| `PAT_TOKEN`          | CI/CD piekļuve PR komentāriem, artefaktiem un validācijas skriptiem      | pievienots README      |
+
+> Visi tokeni tiek glabāti GitHub Secrets sadaļā un tiek izmantoti tikai CI/CD kontekstā.  
+> Šī dokumentācija palīdz contributoram saprast, kā tokeni tiek izmantoti reproducējamības un drošības nodrošināšanai.
+
+
 
 ## 👥 Autori
 

@@ -254,4 +254,3 @@ flutter pub get
 flutter test --update-goldens  # Generate golden images for first run
 flutter run
 ```
-

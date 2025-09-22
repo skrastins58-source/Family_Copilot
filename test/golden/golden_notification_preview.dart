@@ -1,10 +1,5 @@
-// Golden test for notification preview widget
-// This test validates the visual appearance of notification components
-// to ensure consistent UI rendering across different environments
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 void main() {
   group('Notification Preview Golden Tests', () {
     testWidgets('notification preview golden test', (WidgetTester tester) async {
@@ -80,8 +75,7 @@ void main() {
                     ),
                     const SizedBox(height: 12),
                     // Notification content
-                    Text(
-                      'Your notification preview is ready!',
+                    Text
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -90,7 +84,6 @@ void main() {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'This is a preview of how notifications will appear in the Family Copilot application.',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey.shade700,
@@ -131,9 +124,7 @@ void main() {
       );
 
       await tester.pumpWidget(notificationWidget);
-      await tester.pumpAndSettle();
-
-      // Compare the notification preview with golden file
+      await tester.pumpAndSettle()
       await expectLater(
         find.byType(Scaffold),
         matchesGoldenFile('goldens/notification_preview.png'),
@@ -141,3 +132,4 @@ void main() {
     });
   });
 }
+

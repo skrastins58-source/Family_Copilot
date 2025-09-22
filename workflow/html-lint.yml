@@ -1,0 +1,19 @@
+name: HTML Lint
+
+on:
+  pull_request:
+    paths:
+      - 'landing.html'
+
+jobs:
+  lint-html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install htmlhint
+        run: npm install -g htmlhint
+
+      - name: Run htmlhint
+        run: htmlhint landing.html
