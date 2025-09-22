@@ -1,0 +1,7 @@
+testWidgets('MyWidget golden test', (WidgetTester tester) async {
+  await tester.pumpWidget(MyWidget());
+  await expectLater(
+    find.byType(MyWidget),
+    matchesGoldenFile('goldens/my_widget.png'),
+  );
+});
