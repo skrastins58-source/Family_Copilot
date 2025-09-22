@@ -106,3 +106,6 @@ Ja Copilot divreiz pārprasa un lietotājs (Janis) apstiprina ar “jā”, Copi
 ## 👥 Autori
 
 Family Copilot Team — demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
+
+
+Token for tests - GOLDEN . Use when i say.
