@@ -18,36 +18,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 LV: Izvelk repozitoriju / EN: Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Pilna vēsture versijām/tagiem
 
-      - name: 🐳 LV: Pieslēdzas GHCR / EN: Log in to GitHub Container Registry
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: 🛠️ LV: Uzstāda Flutter / EN: Set up Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.4'
+          flutter-version: 3.35.4
 
-      - name: 🌐 LV: Aktivizē web atbalstu / EN: Enable web support
+      - name: Enable web support
         run: flutter config --enable-web
 
-      - name: 📦 LV: Ielādē atkarības / EN: Get dependencies
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: 📱 LV: Būvē Android APK / EN: Build Android APK
+      - name: Build Android APK
         run: flutter build apk --debug
 
-      - name: 🌍 LV: Būvē Web bundle / EN: Build Web bundle
+      - name: Build Web bundle
         run: flutter build web --release
 
-      - name: 📤 LV: Augšupielādē artefaktus / EN: Upload build artifacts
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
@@ -74,10 +74,10 @@ jobs:
       - name: 📦 Get dependencies
         run: flutter pub get
 
-      - name: 🧪 LV: Palaiž testus / EN: Run tests
+      - name: Run tests
         run: flutter test --coverage
 
-      - name: 📊 LV: Augšupielādē pārklājuma datus / EN: Upload coverage report
+      - name: Upoad coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
@@ -93,7 +93,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: ✅ LV: Drošs git fetch / EN: Safe git fetch
+      - name: Safe git fetch
         run: |
+        
           git fetch origin main  # ✅ Neatjauno lokālo zaru
           echo "Safe fetch completed ✅"
