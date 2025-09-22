@@ -1,3 +1,4 @@
+
 # Miscellaneous
 *.class
 *.log
@@ -102,3 +103,7 @@ test/failures/
 # Golden tests - commit golden images but not failure directories
 # goldens/*.png should be committed
 test/**/failures/
+pubspec.lock
+=======
+node_modules
+>>>>>>> 40cf7cb (WIP: Save local changes before rebase)

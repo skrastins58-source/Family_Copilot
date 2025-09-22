@@ -1,0 +1,9 @@
+mkdir -p assets/icons
+touch assets/icons/.gitkeep
+git add assets/icons/.gitkeep
+git commit -m "chore: add .gitkeep to assets/icons to preserve empty dir"
+
+
+git rm assets/icons/.gitkeep
+git add assets/icons/logo.png
+git commit -m "feat: add icon and remove .gitkeep"
