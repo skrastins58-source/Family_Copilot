@@ -44,6 +44,24 @@ Kods
 
 Zarojumu sliekšņa paaugstināšana uz 80% atspoguļo stabilo testu infrastruktūru, kas nodrošina augstu koda kvalitāti un mazina bugs risku production vidē.
 
+### Kvalitātes Kritēriji un Validācijas Sliekšņi
+
+| **Validācijas veids** | **Kritērijs** | **Slieksnis** | **Statuss** | **Darbība** |
+|----------------------|---------------|---------------|-------------|-------------|
+| 🏎️ **LHCI Performance** | First Contentful Paint (FCP) | ≤ 2000ms | ⚠️ Warn | Optimizēt resursu ielādi |
+| ⚡ **LHCI Interactive** | Time to Interactive (TTI) | ≤ 3000ms | ⚠️ Warn | Samazināt JavaScript izmēru |
+| ♿ **LHCI Accessibility** | Accessibility Score | ≥ 0.9 (90%) | ❌ Error | Obligāta labošana |
+| 🔍 **LHCI SEO** | SEO Score | ≥ 0.9 (90%) | ⚠️ Warn | Meta tagu optimizācija |
+| 🧪 **Golden Tests** | Visual Regression | 0 izmaiņas | ❌ Error | UI konsistences pārbaude |
+| 📦 **Bundle Size** | Build izmērs | < 5MB | ⚠️ Warn | Dependencies audits |
+| 🧹 **Code Coverage** | Zaru segums | ≥ 80% | ❌ Error | Testu paplašināšana |
+
+**Automatizētas pārbaudes PR procesos:**
+- ✅ LHCI rezultāti ar emoji statusiem un artefaktu saitēm
+- ✅ Bundle size salīdzinājums ar iepriekšējām versijām
+- ✅ Golden test diff vizualizācija
+- ✅ Coverage delta atskaites
+
 ## GitHub Copilot Labākās Prakses
 
 Šis projekts demonstrē, kā rakstīt kodu, lai GitHub Copilot sniegtu vislabākos ieteikumus:
@@ -172,6 +190,46 @@ flutter pub get
 # Pokreniti aplikāciju
 flutter run
 ```
+
+## 🤖 CI/CD Automatizācija un Kvalitātes Kontrole
+
+### Lighthouse CI (LHCI) Konfigurācija
+
+Projekts izmanto `lighthouserc.json` optimizētu konfigurāciju performance un accessibility auditiem:
+
+```bash
+# Palaidiet LHCI lokāli
+npm install -g @lhci/cli
+lhci autorun
+```
+
+**Konfigurētie sliekšņi:**
+- 🏎️ First Contentful Paint (FCP): ≤ 2000ms
+- ⚡ Time to Interactive (TTI): ≤ 3000ms  
+- ♿ Accessibility Score: ≥ 90% (obligāts)
+- 🔍 SEO Score: ≥ 90%
+
+### PR Komentāra Automatizācija
+
+Izpildiet PR kvalitātes atskaites ģenerēšanai:
+
+```bash
+# Manuālā izpilde
+./scripts/pr_comment_automation.sh
+
+# CI/CD kontekstā (GitHub Actions)
+export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+export PR_NUMBER=${{ github.event.number }}
+./scripts/pr_comment_automation.sh
+```
+
+**Skripts apkopo:**
+- 📊 LHCI performance metrikas
+- 📦 Bundle size salīdzinājumus  
+- 🖼️ Golden test vizuālās atšķirības
+- 🧪 Coverage delta izmaiņas
+
+Rezultāts: automatisks PR komentārs ar emoji statusiem un artefaktu saitēm.
 
 ## Copilot Lietošanas Ieteikumi
 

@@ -95,6 +95,12 @@ google-services.json
 flutter.tar.xz
 flutter/
 
+
+# LHCI and automation temp files
+lhci_report.json
+pr_comment.md
+previous_bundle_size.txt
+
 # Test related
 coverage/
 test/failures/
