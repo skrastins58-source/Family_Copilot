@@ -1,10 +1,12 @@
 name: family_copilot
-description: >
-  A Flutter project that demonstrates GitHub Copilot best practices with notification system,
-  deep-link navigation, personalized filtering, and golden test validation.
+description: 
+
+  A Flutter project demonstrating GitHub Copilot best practices, including
+  notification systems, deep-link navigation, personalized filtering, and
+  contributor-friendly CI workflows.
 
 version: 1.0.0+1
-
+publish_to: none
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
@@ -28,11 +30,12 @@ dependencies:
   # 🎨 Icons
   cupertino_icons: 1.0.6
 
+
   # 🌐 Optional: Localization support
-  intl: ^0.18.1
+  intl: 0.18.1
 
   # 🖼️ Optional: SVG support (if needed)
-  flutter_svg: ^2.0.9
+  flutter_svg: 2.0.9
 
 dev_dependencies:
   # 🛠️ Code generation
@@ -47,6 +50,16 @@ dev_dependencies:
     sdk: flutter
 
   # 🚀 Integration testing
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 4.0.0
+  build_runner: 2.4.12
+  mockito: 5.4.4
+  golden_toolkit: any
+
   integration_test:
     sdk: flutter
 
@@ -62,3 +75,4 @@ flutter:
   # 🖼️ Golden test assets (optional)
   # Ensure these are committed and validated via CI
   # - test/golden/
+

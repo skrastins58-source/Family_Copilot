@@ -1,0 +1,17 @@
+# Flutter build artifacts
+build/
+.dart_tool/
+.packages
+.pub-cache/
+
+# IDE/editor configs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore

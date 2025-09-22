@@ -1,0 +1,28 @@
+# LV: Bāzes attēls Flutter Web būvei / EN: Base image for Flutter Web build
+FROM ubuntu:22.04
+
+# LV: Instalē nepieciešamos rīkus / EN: Install required tools
+RUN apt-get update && apt-get install -y \
+  curl git unzip xz-utils nginx \
+  && rm -rf /var/lib/apt/lists/*
+
+# LV: Instalē Flutter / EN: Install Flutter
+RUN git clone https://github.com/flutter/flutter.git /flutter
+ENV PATH="/flutter/bin:/flutter/bin/cache/dart-sdk/bin:${PATH}"
+RUN flutter doctor
+
+# LV: Kopē projektu / EN: Copy project
+WORKDIR /app
+COPY . /app
+
+# LV: Būvē Flutter Web / EN: Build Flutter Web
+RUN flutter config --enable-web && \
+    flutter pub get && \
+    flutter build web --release
+
+# LV: Iekopē uz Nginx / EN: Copy build to Nginx
+RUN rm -rf /usr/share/nginx/html/* && \
+    cp -r build/web/* /usr/share/nginx/html/
+
+# LV: Startē Nginx / EN: Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
