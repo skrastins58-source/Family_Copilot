@@ -1,4 +1,4 @@
-name: CI - Build, Test & Validate
+name: CI – Build, Test & Validate
 
 on:
   pull_request:
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Pilna vēsture versijām/tagiem
+          fetch-depth: 0
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
@@ -83,18 +83,29 @@ jobs:
           name: coverage-report
           path: coverage
 
+
   validate-main:
     name: Validate Git Fetch Safety
-    runs-on: ubuntu-latest
 
-    steps:
+validate-git:
+    name: Validate Git Diff Safety
+   
+   runs-on: ubuntu-latest
+   steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
 
       - name: Safe git fetch
         run: |
         
           git fetch origin main  # Neatjauno lokālo zaru
           echo "Safe fetch completed "
+          
+      - name: Safe git diff
+        run: |
+          git fetch origin
+          git diff origin/main HEAD || git diff HEAD~1 HEAD
+          echo "✅ Git diff completed successfully"
