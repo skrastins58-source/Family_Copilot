@@ -3,6 +3,7 @@ name: CI Golden Tests
 on:
   pull_request:
     branches: [ main, master, develop ]
+
     paths:
       - "lib/**"
       - "test/golden/**"
@@ -10,6 +11,7 @@ on:
       - "scripts/**"
       - ".github/workflows/ci-golden.yml"
       - "pubspec.yaml"
+
   push:
     branches: [ main, master, develop ]
   workflow_dispatch:
@@ -26,11 +28,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+    
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.35.4'
+        with:  
+          flutter-version: 3.35.4
 
       - name: Fetch default branch safely
         run: |
@@ -67,6 +69,17 @@ jobs:
 
       - name: Generate PR comment
         if: github.event_name == 'pull_request'
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [ -f scripts/post-pr-summary.js ]; then
+            node scripts/post-pr-summary.js
+          else
+            echo "PR summary script not found, skipping..."
+          fi
+
         run: node scripts/post-pr-summary.js
         env:
           GOLDEN_ARTIFACT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
