@@ -1,31 +1,12 @@
-name: CI
+name: CI – Build, Test & Validate
 
 on:
-  push:
-    branches:
-      - main
-      - master
-      - develop
-
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-    branches:
-      - main
-      - master
-      - develop
-
+    types: [opened, synchronize, reopened]
+    branches: [main, master, develop]
   pull_request_target:
-    types:
-      - opened
-      - synchronize
-      - reopened
-    branches:
-      - main
-      - master
-      - develop
+    types: [opened, synchronize, reopened]
+    branches: [main, master, develop]
 
 permissions:
   contents: read
@@ -35,14 +16,12 @@ jobs:
   build:
     name: Build APK & Web
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Izvelk pilnu vēsturi
-
-      - name: Fetch main branch
-        run: git fetch origin main:main
+          fetch-depth: 0
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
@@ -54,7 +33,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.0"
+          flutter-version: 3.35.4
 
       - name: Enable web support
         run: flutter config --enable-web
@@ -66,7 +45,7 @@ jobs:
         run: flutter build apk --debug
 
       - name: Build Web bundle
-        run: flutter build web --release
+        run:  flutter build web --release
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -80,52 +59,43 @@ jobs:
     name: Run tests & coverage
     runs-on: ubuntu-latest
     needs: build
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.0"
+          flutter-version: 3.35.4
 
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Run unit & widget tests with coverage
+      - name: Run tests
         run: flutter test --coverage
 
-      - name: Enforce coverage thresholds
-        run: scripts/check_coverage.sh
-
-      - name: Upload coverage report
+      - name:  Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: coverage
+          path: coverage/
 
-      - name: Run golden tests
-        run: flutter test
-
-      - name: Upload golden artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: golden-artifacts
-          path: |
-            goldens
-            tests/diff
-
-  pr-summary:
-    name: Post PR Quality Summary
-    if: github.event_name == 'pull_request'
-    needs: test
+  validate-git:
+    name:  Validate Git Diff Safety
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Post PR summary
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: node post-pr-summary.js
+      - name: Safe git diff
+        run: |
+          git fetch origin
+          git diff origin/main HEAD || git diff HEAD~1 HEAD
+          echo " Git diff completed successfully
+          

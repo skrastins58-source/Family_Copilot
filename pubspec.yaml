@@ -1,7 +1,12 @@
 name: family_copilot
-description: A Flutter project that demonstrates GitHub Copilot best practices with notification system, deep-link navigation, and personalized filtering.
+description: >
+  A Flutter project demonstrating GitHub Copilot best practices, including
+  notification systems, deep-link navigation, personalized filtering, and
+  contributor-friendly CI workflows.
 
 version: 1.0.0+1
+
+publish_to: none
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -17,12 +22,15 @@ dependencies:
   cupertino_icons: 1.0.6
 
 dev_dependencies:
-  build_runner: 2.4.12
-  flutter_lints: 4.0.0
-  mockito: 5.4.4
   flutter_test:
-    sdk: flutter 
-  
+    sdk: flutter
+  flutter_lints: 4.0.0
+  build_runner: 2.4.12
+  mockito: 5.4.4
+  golden_toolkit: any
+  integration_test:
+    sdk: flutter
+
 flutter:
   uses-material-design: true
   assets:

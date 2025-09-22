@@ -1,6 +1,3 @@
-// Golden test for notification preview widget
-// This test validates the visual appearance of notification components
-// to ensure consistent UI rendering across different environments
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -141,3 +138,4 @@ void main() {
     });
   });
 }
+
