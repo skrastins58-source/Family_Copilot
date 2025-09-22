@@ -1,17 +1,15 @@
-
-{
-  "scripts": {
-    "dev": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
 {
   "name": "eruro-site",
   "version": "1.0.0",
+  "private": true,
   "type": "commonjs",
   "scripts": {
     "optimize:svg": "svgo -f Docs/assets/svg -q --config=svgo.config.js",
     "optimize:img": "node scripts/optimize-images.js",
-    "build": "npm run optimize:svg && npm run optimize:img"
+    "build": "npm run optimize:svg && npm run optimize:img",
+    "lint": "eslint . --ext .js,.jsx",
+    "test": "echo \"No tests\" && exit 0",
+    "ci": "npm run lint && npm run test && npm run build"
   },
   "dependencies": {
     "nodemailer": "^7.0.6"
@@ -29,7 +27,6 @@
     "url": "https://github.com/skrastins58-source/Family_Copilot/issues"
   },
   "homepage": "https://github.com/skrastins58-source/Family_Copilot#readme",
-  "keywords": [],
-  "author": "",
   "license": "ISC"
 }
+
