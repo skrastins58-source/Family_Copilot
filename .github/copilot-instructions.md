@@ -1,12 +1,12 @@
-# 🤖 Copilot Instructions for Family_Copilot
+#  Copilot Instructions for Family_Copilot
 
-## 🧠 Mērķis
+## Mērķis
 
 Šis fails definē norādījumus un sadarbības principus, kas palīdz GitHub Copilot un komandas locekļiem ģenerēt, pārskatīt un uzturēt kodu saskaņā ar projekta kvalitātes standartiem. Tas attiecas tikai uz repozitoriju `skrastins58-source/Family_Copilot`.
 
 ---
 
-## ✅ Vadlīnijas Copilot lietošanai
+## Vadlīnijas Copilot lietošanai
 
 - Izmanto Copilot, lai ģenerētu sākotnējo kodu, bet vienmēr pārskati un pielāgo to projekta stilam.
 - Komentāriem jābūt skaidriem, kontekstuāliem un atbilstošiem funkcionalitātei.
@@ -19,7 +19,7 @@
 
 ---
 
-## 🔍 Kvalitātes validācija
+## Kvalitātes validācija
 
 Copilot ģenerētais kods tiek pārbaudīts ar:
 
@@ -30,7 +30,7 @@ Copilot ģenerētais kods tiek pārbaudīts ar:
 
 ---
 
-## 📎 Artefakti un pārskati
+##  Artefakti un pārskati
 
 - LHCI HTML reporti: `.lighthouseci/*.html`
 - Golden diff attēli: `tests/diff/*.png`
@@ -38,13 +38,13 @@ Copilot ģenerētais kods tiek pārbaudīts ar:
 
 ---
 
-## 💬 PR komentāru automatizācija
+##  PR komentāru automatizācija
 
 Pēc testiem tiek ģenerēts PR komentārs ar kvalitātes kopsavilkumu, izmantojot `pr-comment.js`.
 
 ---
 
-## 🚫 Ierobežojumi
+##  Ierobežojumi
 
 Copilot nedrīkst ģenerēt kodu no šādiem ceļiem:
 
@@ -58,14 +58,14 @@ Copilot nedrīkst ieteikt ārējas API integrācijas vai atkarības, ja tās nav
 
 ---
 
-## 📐 Tehniskā stilistika
+## Tehniskā stilistika
 
 - Izmanto `Provider` stāvokļa pārvaldībai
 - Navigācijai izmanto `GoRouter` ar deep-link atbalstu
 - UI komponentiem izmanto `Material Design 3`
 - Ievēro clean architecture principus: Presentation → Logic → Data
 
-- ### ✅ Validācija
+- ### Validācija
 
 Lai pārbaudītu testu pārklājumu, golden struktūru un CI statusu, palaidiet:
 
@@ -75,17 +75,17 @@ Lai pārbaudītu testu pārklājumu, golden struktūru un CI statusu, palaidiet:
 
 ---
 
-## 🧭 Konteksts
+## Konteksts
 
 Šie norādījumi attiecas tikai uz `Family_Copilot` repozitoriju organizācijā `skrastins58-source`. Copilot nedrīkst izmantot ārēju repozitoriju kodu vai ieteikumus, kas nav saistīti ar šo projektu.
 
 ---
 
-## 🛑 Izņēmuma mehānisms
+## Izņēmuma mehānisms
 
 Ja Copilot divreiz pārprasa un lietotājs (Janis) apstiprina ar “jā”, Copilot drīkst pārkāpt kādu no iepriekš minētajiem ierobežojumiem konkrētajā kontekstā. Šis izņēmums attiecas tikai uz interaktīvu sesiju ar Janis, un tas nedrīkst tikt izmantots automātiski vai bez skaidras apstiprināšanas.
 
----## 🔐 CI/CD Tokeni
+---## CI/CD Tokeni
 
 Šie tokeni tiek izmantoti Family Copilot CI/CD plūsmās, golden testu validācijā un GitHub Container Registry (GHCR) autentifikācijā.
 
@@ -103,6 +103,6 @@ Ja Copilot divreiz pārprasa un lietotājs (Janis) apstiprina ar “jā”, Copi
 
 
 
-## 👥 Autori
+## Autori
 
 Family Copilot Team — demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
