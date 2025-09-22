@@ -118,7 +118,7 @@ jobs:
 
   pr-summary:
     name: Post PR Quality Summary
-    if: github.event_name -- 'pull_request'
+    if: github.event_name == 'pull_request'
     needs: test
     runs-on: ubuntu-latest
     steps:
