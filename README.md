@@ -234,6 +234,20 @@ Mērķis: Stabilizēt UI golden testu plūsmu un ieviest reproducējamu vizuāl�
 - **Platform consistency**: CI izmanto Ubuntu ar Flutter 3.22.0 konsistentiem rezultātiem
 - **Minimal test scope**: Testējiet konkrētus UI komponentus, nevis veselas aplikācijas
 
+## 🧪 CI/CD Automation Scripts
+
+Family_Copilot iekļauj contributor-friendly automatizācijas skriptus, kas nodrošina efektīvu izstrādes plūsmu un kvalitātes kontroli. Visi skripti ir divvalodīgi (Latviešu/English) un ievēro skrastins58-source standartus.
+
+Family_Copilot includes contributor-friendly automation scripts that ensure efficient development workflow and quality control. All scripts are bilingual (Latvian/English) and follow skrastins58-source standards.
+
+**📋 Pieejamie skripti / Available scripts:**
+- PR statusa pārbaude un etiķešu piešķiršana / PR status check and labeling
+- Golden attēlu validācija / Golden image validation  
+- GitHub Actions artefaktu versiju atjaunināšana / GitHub Actions artifact version updates
+- PR kopsavilkuma publicēšana / PR summary publishing
+
+**📖 Detalizēta dokumentācija:** [scripts/README.md](scripts/README.md)
+
 ## Autori
 
 Family Copilot Team - demonstrējot GitHub Copilot labākās prakses Flutter izstrādē.
