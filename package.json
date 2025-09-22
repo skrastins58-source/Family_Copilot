@@ -1,7 +1,25 @@
-
 {
+  "name": "family-copilot-site",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "dev": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+    "start": "node index.js",
+    "test": "echo \"No tests\" && exit 0",
+    "ci": "npm run lint && npm run test",
+    "lighthouse": "lhci autorun",
+    "lighthouse:desktop": "lhci autorun --collect.settings.formFactor=desktop",
+    "validate-html": "html-validate \"docs/*.html\"",
+    "validate-accessibility": "pa11y \"docs/landing.html\"",
+    "lint": "echo \"Add lint command (eslint/prettier) if desired\" && exit 0"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.12.0",
+    "html-validate": "^8.7.4",
+    "pa11y": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "license": "ISC"
 }
